@@ -1,0 +1,144 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  padding: 20px;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.6s ease;
+}
+
+.login-card h2 {
+  text-align: center;
+  color: #1a1a1a;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+/* ======= Inputs ======= */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.input-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 42px 12px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  outline: none;
+}
+
+/* ======= Ícones ======= */
+.input-group i {
+  position: absolute;
+  right: 12px;
+  top: 39px;
+  color: #888;
+}
+
+/* ======= Botão ======= */
+button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #1976d2;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #125ca1;
+}
+
+/* ======= Link ======= */
+.link {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  color: #1976d2;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* ======= Responsividade ======= */
+@media (max-width: 600px) {
+  .login-card {
+    padding: 30px 20px;
+  }
+
+  .login-card h2 {
+    font-size: 1.5rem;
+  }
+
+  input,
+  button {
+    font-size: 0.95rem;
+  }
+}
+
+/* ======= Animação ======= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.input-group select {
+  width: 100%;
+  padding: 12px 42px 12px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  transition: 0.3s;
+  appearance: none;
+  cursor: pointer;
+}
+
+.input-group select:focus {
+  border-color: #1565c0;
+  box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.2);
+  outline: none;
+}

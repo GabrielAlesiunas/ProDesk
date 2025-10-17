@@ -1,0 +1,35 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Criar Conta</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label>Nome</label>
+        <input type="text" formControlName="nome" required />
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" formControlName="email" required />
+      </div>
+
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" formControlName="senha" required />
+      </div>
+
+      <div class="input-group">
+        <label>Tipo de Usuário</label>
+        <select formControlName="tipo" required>
+          <option value="">Selecione...</option>
+          <option value="locatorio">Locatório</option>
+          <option value="anfitriao">Anfitrião</option>
+        </select>
+      </div>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+
+    <a routerLink="/login" class="link">Já tem uma conta? Entrar</a>
+  </div>
+</div>

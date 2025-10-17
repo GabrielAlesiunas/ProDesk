@@ -1,0 +1,30 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Entrar</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" formControlName="email" required />
+      </div>
+
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" formControlName="senha" required />
+      </div>
+
+      <div class="input-group">
+        <label>Tipo de Usuário</label>
+        <select formControlName="tipo" required>
+          <option value="">Selecione...</option>
+          <option value="locatorio">Locatório</option>
+          <option value="anfitriao">Anfitrião</option>
+        </select>
+      </div>
+
+      <button type="submit">Entrar</button>
+    </form>
+
+    <a routerLink="/register" class="link">Criar uma conta</a>
+  </div>
+</div>
