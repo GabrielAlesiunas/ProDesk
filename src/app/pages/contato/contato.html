@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - ProDesk Coworking</title>
+    <link rel="stylesheet" href="contato.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- MENU -->
+    <div class="page-container">
+        <header class="menu">
+            <h1>ProDesk Coworking</h1>
+            <nav>
+                <a href="#">Espaços</a>
+                <a href="#">Reservas</a>
+                <a href="#">Contato</a>
+                <a href="#">Cadastrar espaço</a>
+            </nav>
+
+            <!-- Área do usuário -->
+            <div class="user-area">
+                <span class="user-name">Carlos</span>
+                <img class="user-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuário">
+            </div>
+        </header>
+    </div>
+
+        <!-- CONTEÚDO -->
+        <main class="page-container contato-container">
+            <h2>Contato</h2>
+
+            <div class="contato-wrapper">
+                <!-- Formulário -->
+                <form class="contato-form">
+                    <h3 class="fale-conosco">Tire sua Dúvida</h3>
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+
+                    <label for="assunto">Assunto</label>
+                    <input type="text" id="assunto" name="assunto" placeholder="Assunto da mensagem" required>
+
+                    <label for="mensagem">Mensagem</label>
+                    <textarea id="mensagem" name="mensagem" rows="5" placeholder="Escreva sua mensagem..."
+                        required></textarea>
+
+                    <button type="submit" class="enviar">Enviar Mensagem</button>
+                </form>
+
+                <!-- Informações de contato -->
+                <div class="info-contato">
+                    <h3 class="fale-conosco">Fale Conosco</h3>
+                    <p class="intro">Nossa equipe está pronta para ajudar você. Tire dúvidas, envie sugestões ou fale
+                        sobre
+                        reservas.</p>
+
+                    <div class="contato-card">
+                        <span class="card-icon">📞</span>
+                        <div class="card-info">
+                            <p><strong>Telefone:</strong> (15) 3238-188</p>
+                        </div>
+                    </div>
+
+                    <div class="contato-card">
+                        <span class="card-icon">✉️</span>
+                        <div class="card-info">
+                            <p><strong>Email:</strong> <a
+                                    href="mailto:contato@prodesk.com.br">contato@prodesk.com.br</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contato-card">
+                        <span class="card-icon">📍</span>
+                        <div class="card-info">
+                            <p><strong>Endereço:</strong> Rodovia Senador José Ermirio de Moraes, 1425 - Sorocaba, SP
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contato-card">
+                        <span class="card-icon">⏰</span>
+                        <div class="card-info">
+                            <p><strong>Horário:</strong> Seg - Sex: 9h às 23h</p>
+                        </div>
+                    </div>
+
+                    <div class="contato-card">
+                        <span class="card-icon">💳</span>
+                        <div class="card-info">
+                            <p><strong>Reservas e Pagamentos:</strong> Cartão e Pix</p>
+                        </div>
+                    </div>
+
+                    <div class="redes-sociais">
+                        <a href="#" target="_blank">GitHub</a>
+                        <a href="#" target="_blank">Instagram</a>
+                        <a href="#" target="_blank">LinkedIn</a>
+                    </div>
+
+                    <a href="https://wa.me/551112345678" target="_blank" class="btn-whatsapp">Fale pelo WhatsApp</a>
+                </div>
+            </div>
+
+            <!-- Mapa -->
+            <div class="mapa-container">
+                <h3>Encontre-nos</h3>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.123456789012!2d-47.4323719!3d-23.4698745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf5fe2a6c6f25d%3A0xd970be85f3c967da!2sFACENS!5e0!3m2!1spt-BR!2sbr!4v1600000000000!5m2!1spt-BR!2sbr"
+                    allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+
+            <!-- Nosso Time -->
+            <section class="time-container">
+                <h2>Nosso Time</h2>
+                <div class="cards-time">
+                    <!-- Integrante 1 -->
+                    <div class="card-time">
+                        <img src="assets/abrao.jpeg" alt="Abrão Trevizan" class="foto-time">
+                        <h3>Abrão Trevizan</h3>
+                        <div class="links-time">
+                            <a href="#" target="_blank">Instagram</a>
+                            <a href="#" target="_blank">GitHub</a>
+                        </div>
+                    </div>
+
+                    <!-- Integrante 2 -->
+                    <div class="card-time">
+                        <img src="assets/gabriel.jpeg" alt="Gabriel Alesiunas" class="foto-time">
+                        <h3>Gabriel Alesiunas</h3>
+                        <div class="links-time">
+                            <a href="#" target="_blank">Instagram</a>
+                            <a href="#" target="_blank">LinkedIn</a>
+                        </div>
+                    </div>
+
+                    <!-- Integrante 3 -->
+                    <div class="card-time">
+                        <img src="assets/ryan.jpeg" alt="Ryan Rezani" class="foto-time">
+                        <h3>Ryan Rezani</h3>
+                        <div class="links-time">
+                            <a href="#" target="_blank">Instagram</a>
+                            <a href="#" target="_blank">LinkedIn</a>
+                        </div>
+                    </div>
+
+                    <!-- Integrante 4 -->
+                    <div class="card-time">
+                        <img src="assets/vitor.jpeg" alt="Vitor Gimenez" class="foto-time">
+                        <h3>Vitor Gimenez</h3>
+                        <div class="links-time">
+                            <a href="#" target="_blank">Instagram</a>
+                            <a href="#" target="_blank">LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+</body>
+
+</html>

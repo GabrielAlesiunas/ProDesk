@@ -1,18 +1,25 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ======= Container ======= */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1976d2, #42a5f5);
   padding: 20px;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
 }
 
+/* ======= Card ======= */
 .login-card {
   background: #fff;
   border-radius: 16px;
   padding: 40px 30px;
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   animation: fadeIn 0.6s ease;
 }
@@ -38,35 +45,28 @@
   margin-bottom: 8px;
 }
 
-.input-group input {
+.input-group input,
+.input-group select {
   width: 100%;
-  box-sizing: border-box;
   padding: 12px 42px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
   transition: 0.3s;
+  background-color: #fff;
 }
 
-.input-group input:focus {
+.input-group input:focus,
+.input-group select:focus {
   border-color: #1976d2;
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
   outline: none;
-}
-
-/* ======= Ícones ======= */
-.input-group i {
-  position: absolute;
-  right: 12px;
-  top: 39px;
-  color: #888;
 }
 
 /* ======= Botão ======= */
 button {
   display: block;
   width: 100%;
-  box-sizing: border-box;
   padding: 12px;
   border: none;
   border-radius: 8px;
@@ -75,14 +75,15 @@ button {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s;
 }
 
 button:hover {
   background-color: #125ca1;
+  transform: translateY(-2px);
 }
 
-/* ======= Link ======= */
+/* ======= Links ======= */
 .link {
   display: block;
   text-align: center;
@@ -96,6 +97,25 @@ button:hover {
   text-decoration: underline;
 }
 
+/* ======= Erros ======= */
+.input-group input.invalid,
+.input-group select.invalid {
+  border-color: #e53935;
+  box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.2);
+}
+
+.error {
+  color: #e53935;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.error i {
+  margin-right: 6px;
+}
+
 /* ======= Responsividade ======= */
 @media (max-width: 600px) {
   .login-card {
@@ -107,6 +127,7 @@ button:hover {
   }
 
   input,
+  select,
   button {
     font-size: 0.95rem;
   }
@@ -122,23 +143,4 @@ button:hover {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-
-.input-group select {
-  width: 100%;
-  padding: 12px 42px 12px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  background-color: white;
-  transition: 0.3s;
-  appearance: none;
-  cursor: pointer;
-}
-
-.input-group select:focus {
-  border-color: #1565c0;
-  box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.2);
-  outline: none;
 }

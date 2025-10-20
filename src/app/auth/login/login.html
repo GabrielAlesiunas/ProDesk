@@ -1,30 +1,49 @@
 <div class="login-container">
   <div class="login-card">
-    <h2>Entrar</h2>
+    <div class="auth-logo">
+      <h2>Entrar</h2>
+    </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- Email -->
       <div class="input-group">
         <label>Email</label>
-        <input type="email" formControlName="email" required />
+        <i class="fas fa-envelope"></i>
+        <input type="email" formControlName="email" placeholder=" " [class.invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" />
+        <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')">
+          <i class="fas fa-exclamation-circle"></i> Email é obrigatório.
+        </div>
+        <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('email')">
+          <i class="fas fa-exclamation-circle"></i> Email inválido.
+        </div>
+        <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('notFound')">
+          <i class="fas fa-exclamation-circle"></i> Usuário não encontrado.
+        </div>
       </div>
 
+      <!-- Senha -->
       <div class="input-group">
         <label>Senha</label>
-        <input type="password" formControlName="senha" required />
+        <i class="fas fa-lock"></i>
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder=" " [class.invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" />
+        <span class="toggle-pass" (click)="showPassword = !showPassword">
+          <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+        </span>
+        <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
+          <i class="fas fa-exclamation-circle"></i> Senha é obrigatória.
+        </div>
+        <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('incorrect')">
+          <i class="fas fa-exclamation-circle"></i> Senha incorreta.
+        </div>
       </div>
 
-      <div class="input-group">
-        <label>Tipo de Usuário</label>
-        <select formControlName="tipo" required>
-          <option value="">Selecione...</option>
-          <option value="locatorio">Locatório</option>
-          <option value="anfitriao">Anfitrião</option>
-        </select>
-      </div>
-
-      <button type="submit">Entrar</button>
+      <!-- Botão -->
+      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
     </form>
 
-    <a routerLink="/register" class="link">Criar uma conta</a>
+    <div class="auth-footer">
+      <a routerLink="/register" class="link">Não tem uma conta? Cadastrar</a>
+    </div>
   </div>
 </div>

@@ -1,0 +1,150 @@
+/* ====== Reset e base ====== */
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f5f6fa;
+  color: #333;
+}
+
+/* ====== Container principal ====== */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 40px;
+}
+
+/* ====== MENU SUPERIOR ====== */
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgb(58, 162, 233);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.menu h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.menu nav {
+  display: flex;
+  gap: 25px;
+}
+
+.menu nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.menu nav a:hover {
+  color: #d1ecff;
+}
+
+/* Área do usuário */
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+/* ====== MAIN ====== */
+main {
+  margin-top: 100px; /* compensa o header fixo */
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+/* Títulos das seções */
+h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #3aa2e9;
+}
+
+/* ====== Cartões de reservas ====== */
+/* Reservas ativas */
+.reserva-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Histórico de reservas */
+.historico-card {
+  background-color: #f0f0f0;
+  padding: 18px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ====== Botões ====== */
+.cancelar-btn {
+  width: 120px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+  background-color: #e74c3c;
+}
+
+.cancelar-btn:hover {
+  background-color: #c0392b;
+}
+
+/* ====== Responsividade ====== */
+@media (max-width: 768px) {
+  .menu {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+
+  .menu nav {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .page-container {
+    padding: 120px 15px 40px;
+  }
+}

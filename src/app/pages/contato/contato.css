@@ -1,0 +1,367 @@
+/* ====== Reset e base ====== */
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f5f6fa;
+  color: #333;
+}
+
+/* ====== Container principal ====== */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 40px;
+}
+
+/* ====== MENU SUPERIOR ====== */
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgb(58, 162, 233);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.menu h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.menu nav {
+  display: flex;
+  gap: 25px;
+}
+
+.menu nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.menu nav a:hover {
+  color: #d1ecff;
+}
+
+/* Área do usuário */
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+/* ===== Título ===== */
+.contato-container h2 {
+  margin-bottom: 50px;
+  text-align: center;
+  color: rgb(58, 162, 233);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ===== Wrapper ===== */
+.contato-wrapper {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+/* ===== Formulário ===== */
+.contato-form {
+  /* background: #fff; */
+  background: linear-gradient(135deg, #f5f9ff, #e0f3ff);
+  padding: 35px 30px;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.contato-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+.contato-form label {
+  font-weight: 600;
+  color: #333;
+}
+
+.contato-form input,
+.contato-form textarea {
+  padding: 14px 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 100%;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.contato-form input:focus,
+.contato-form textarea:focus {
+  outline: none;
+  border-color: rgb(58, 162, 233);
+  box-shadow: 0 0 8px rgba(58, 162, 233, 0.4);
+}
+
+.enviar {
+  background: rgb(58, 162, 233);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%; /* garantir mesmo tamanho */
+  text-align: center;
+  margin-top: 10px;
+}
+
+.enviar:hover {
+  background: rgb(45, 142, 210);
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+
+/* ===== Fale Conosco ===== */
+.fale-conosco{
+    display: flex;
+    justify-content: center;
+    color: rgb(58, 162, 233);
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.info-contato {
+  background: linear-gradient(135deg, #f5f9ff, #e0f3ff);
+  padding: 30px 25px;
+  border-radius: 20px;
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.info-contato h3 {
+  color: rgb(58, 162, 233);
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.info-contato:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+.info-contato .intro {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Contato cards */
+.contato-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* Icones discretos */
+.card-icon {
+  font-size: 20px;
+}
+
+/* Informações internas */
+.card-info p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Redes sociais */
+.redes-sociais {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.redes-sociais a {
+  text-decoration: none;
+  color: rgb(58, 162, 233);
+  font-weight: 500;
+}
+
+.redes-sociais a:hover {
+  color: rgb(45, 142, 210);
+}
+
+/* Botão WhatsApp */
+.btn-whatsapp {
+  display: inline-block;
+  background: #25D366;
+  color: #fff;
+  text-decoration: none;
+  padding: 16px; /* mesmo padding que o Enviar */
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  width: 100%; /* mesmo tamanho que o formulário */
+  transition: all 0.3s;
+  margin-top: 20px;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe5d;
+  transform: scale(1.05);
+}
+
+.enviar, .btn-whatsapp {
+  line-height: 1.4;
+}
+
+/* Mapa */
+.mapa-container {
+  margin: 60px auto 40px;
+  text-align: center;
+  width: calc(500px + 350px + 50px); /* mesma largura do formulário + contato + espaçamento */
+  max-width: 100%;
+}
+
+.mapa-container h3 {
+  color: rgb(58, 162, 233);
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.mapa-container iframe {
+  width: 100%;
+  height: 380px;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ====== Nosso Time ====== */
+.time-container {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.time-container h2 {
+  color: rgb(58, 162, 233);
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.cards-time {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.card-time {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  width: 200px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-time:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.foto-time {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.card-time h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.links-time {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.links-time a {
+  text-decoration: none;
+  color: rgb(58, 162, 233);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.links-time a:hover {
+  color: rgb(45, 142, 210);
+}
+
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .contato-wrapper {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contato-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+  }
+
+  .contato-form, .info-contato {
+    width: 90%;
+  }
+}
