@@ -8,7 +8,6 @@
       <a href="#">Cadastrar espaço</a>
     </nav>
 
-    <!-- Área do usuário -->
     <div class="user-area">
       <span class="user-name">Carlos</span>
       <img class="user-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuário">
@@ -16,18 +15,13 @@
   </header>
 
   <div class="busca-filtros">
-    <!-- Campo de busca -->
     <input type="text" placeholder="Buscar por título ou dono" [(ngModel)]="termoBusca" (input)="filtrarEspacos()" />
-
-    <!-- Filtro por avaliação -->
     <select [(ngModel)]="filtroAvaliacao" (change)="filtrarEspacos()">
       <option value="">Avaliação mínima</option>
       <option value="5">⭐ 5+</option>
       <option value="4">⭐ 4+</option>
       <option value="3">⭐ 3+</option>
     </select>
-
-    <!-- Filtro por preço -->
     <select [(ngModel)]="filtroPreco" (change)="filtrarEspacos()">
       <option value="">Preço por hora</option>
       <option value="asc">Menor para maior</option>
@@ -39,14 +33,12 @@
 
   <div class="cards">
     <div class="card" *ngFor="let espaco of espacosFiltrados">
-      <img [src]="espaco.imagem" alt="{{ espaco.nome }}">
+      <img [src]="espaco.imagem || 'https://via.placeholder.com/300x200?text=Sem+Imagem'" alt="{{ espaco.nome }}">
       <div class="card-info">
         <h3>{{ espaco.nome }}</h3>
         <p>{{ espaco.descricao }}</p>
-        <div class="avaliacao">
-          ⭐ {{ espaco.avaliacao }} / 5
-        </div>
-        <p class="preco">R$ {{ espaco.precoHora }} / hora</p>
+        <div class="avaliacao">⭐ {{ espaco.avaliacao || 0 }} / 5</div>
+        <p class="preco">R$ {{ espaco.precoHora || 0 }} / hora</p>
         <button class="ver-mais" (click)="abrirDetalhes(espaco)">Ver mais</button>
       </div>
     </div>
@@ -58,45 +50,62 @@
       <span class="fechar" (click)="fecharModal()">&times;</span>
 
       <!-- Carrossel -->
+      <!-- Carrossel -->
       <div class="carousel">
-        <img [src]="espacoSelecionado.imagens[imagemIndex]" alt="Imagem do espaço">
-        <button class="anterior" (click)="anteriorImagem()">&#10094;</button>
-        <button class="proxima" (click)="proximaImagem()">&#10095;</button>
+        <img [src]="espacoSelecionado.imagens?.length
+      ? espacoSelecionado.imagens[imagemIndex]
+      : 'https://via.placeholder.com/600x400?text=Sem+Imagem'" alt="Imagem do espaço" />
+
+        <button *ngIf="espacoSelecionado.imagens?.length > 1" class="anterior" (click)="anteriorImagem()">
+          &#10094;
+        </button>
+        <button *ngIf="espacoSelecionado.imagens?.length > 1" class="proxima" (click)="proximaImagem()">
+          &#10095;
+        </button>
       </div>
 
       <!-- Info principal -->
       <h2>{{ espacoSelecionado.nome }}</h2>
-      <div class="avaliacao">⭐ {{ espacoSelecionado.avaliacao }} / 5</div>
+      <div class="avaliacao">⭐ {{ espacoSelecionado.avaliacao || 0 }} / 5</div>
       <p class="descricao">{{ espacoSelecionado.descricao }}</p>
-      <p class="preco">💰 R$ {{ espacoSelecionado.precoHora }} / hora</p>
+      <p class="preco">💰 R$ {{ espacoSelecionado.precoHora || 0 }} / hora</p>
 
       <!-- Comodidades -->
       <h4>Comodidades</h4>
       <ul class="comodidades">
-        <li *ngFor="let item of espacoSelecionado.comodidades">✔ {{ item }}</li>
+        <li *ngFor="let item of espacoSelecionado.comodidades">{{ item }}</li>
+        <li *ngIf="!espacoSelecionado.comodidades?.length">Nenhuma comodidade cadastrada</li>
       </ul>
 
       <!-- Dono do espaço -->
-      <div class="dono-container" (click)="abrirPerfil(espacoSelecionado.dono)">
-        <img class="foto-dono" [src]="espacoSelecionado.dono.foto" alt="Dono">
+      <div class="dono-container" *ngIf="espacoSelecionado.dono; else semDono"
+        (click)="abrirPerfil(espacoSelecionado.dono)">
+        <img class="foto-dono" [src]="espacoSelecionado.dono.foto || 'https://via.placeholder.com/50'" alt="Dono">
         <div>
           <p><strong>{{ espacoSelecionado.dono.nome }}</strong></p>
           <p class="ver-perfil">Ver perfil</p>
         </div>
       </div>
+      <ng-template #semDono>
+        <p>Dono não cadastrado</p>
+      </ng-template>
 
       <!-- Opiniões -->
       <h4>Opiniões dos usuários</h4>
-      <div class="opinioes">
+      <div class="opinioes" *ngIf="espacoSelecionado.opinioes?.length; else semOpinioes">
         <div class="opiniao" *ngFor="let op of espacoSelecionado.opinioes">
-          <img [src]="op.foto" alt="Usuário">
+          <img [src]="op.foto || 'https://via.placeholder.com/40'" alt="Usuário">
           <div>
             <p><strong>{{ op.usuario }}</strong></p>
             <p>{{ op.texto }}</p>
           </div>
         </div>
       </div>
+      <ng-template #semOpinioes>
+        <p>Nenhuma opinião registrada.</p>
+      </ng-template>
 
       <button class="reservar">Reservar agora</button>
     </div>
   </div>
+</div>

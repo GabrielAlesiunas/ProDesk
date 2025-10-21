@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Login } from './auth/login/login';
-import { Register } from './auth/register/register';
+import { RegisterComponent } from './auth/register/register';
 import { Locatorio } from './pages/locatorio/locatorio'
 import { Anfitriao } from './pages/anfitriao/anfitriao';
 import { Contato } from './pages/contato/contato';
@@ -11,7 +11,7 @@ import { CadastrarEspaco } from './pages/cadastrar-espaco/cadastrar-espaco';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
-  { path: 'register', component: Register },
+  { path: 'register', component: RegisterComponent },
   { path: 'locatorio', component: Locatorio },
   { path: 'anfitriao', component: Anfitriao },
   { path: 'contato', component: Contato },

@@ -4,13 +4,23 @@
       <h2>Entrar</h2>
     </div>
 
+    <!-- Formulário -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- Mensagem de erro geral do backend -->
+      <div class="error" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+      </div>
 
       <!-- Email -->
       <div class="input-group">
         <label>Email</label>
         <i class="fas fa-envelope"></i>
-        <input type="email" formControlName="email" placeholder=" " [class.invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" />
+        <input type="email"
+               formControlName="email"
+               placeholder=" "
+               [class.invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" />
+        
         <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')">
           <i class="fas fa-exclamation-circle"></i> Email é obrigatório.
         </div>
@@ -26,10 +36,14 @@
       <div class="input-group">
         <label>Senha</label>
         <i class="fas fa-lock"></i>
-        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder=" " [class.invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" />
+        <input [type]="showPassword ? 'text' : 'password'"
+               formControlName="password"
+               placeholder=" "
+               [class.invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" />
         <span class="toggle-pass" (click)="showPassword = !showPassword">
           <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
         </span>
+
         <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
           <i class="fas fa-exclamation-circle"></i> Senha é obrigatória.
         </div>
@@ -42,6 +56,7 @@
       <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
     </form>
 
+    <!-- Rodapé -->
     <div class="auth-footer">
       <a routerLink="/register" class="link">Não tem uma conta? Cadastrar</a>
     </div>

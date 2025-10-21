@@ -16,83 +16,83 @@
     </div>
   </header>
 
-<!-- CONTEÚDO PRINCIPAL -->
-<main class="page-container perfil-container">
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="page-container perfil-container">
     <h2>Meu Perfil</h2>
 
     <div class="perfil-wrapper">
-        <!-- MENU LATERAL -->
-        <aside class="perfil-menu">
-            <ul>
-                <li [class.active]="activeTab === 'dados'" (click)="selectTab('dados')">
-                    <i class="icon-user"></i> Dados Pessoais
-                </li>
-                <li [class.active]="activeTab === 'seguranca'" (click)="selectTab('seguranca')">
-                    <i class="icon-lock"></i> Segurança
-                </li>
-                <li [class.active]="activeTab === 'pagamento'" (click)="selectTab('pagamento')">
-                    <i class="icon-credit-card"></i> Pagamento
-                </li>
-            </ul>
-        </aside>
+      <!-- MENU LATERAL -->
+      <aside class="perfil-menu">
+        <ul>
+          <li [class.active]="activeTab === 'dados'" (click)="selectTab('dados')">
+            <i class="icon-user"></i> Dados Pessoais
+          </li>
+          <li [class.active]="activeTab === 'seguranca'" (click)="selectTab('seguranca')">
+            <i class="icon-lock"></i> Segurança
+          </li>
+          <li [class.active]="activeTab === 'pagamento'" (click)="selectTab('pagamento')">
+            <i class="icon-credit-card"></i> Pagamento
+          </li>
+        </ul>
+      </aside>
 
-        <!-- CONTEÚDO DAS ABAS -->
-        <div class="perfil-conteudo">
-            <!-- Dados Pessoais -->
-            <div *ngIf="activeTab === 'dados'" class="card">
-                <h3>Dados Pessoais</h3>
-                <p>Atualize suas informações e saiba como elas são utilizadas.</p>
+      <!-- CONTEÚDO DAS ABAS -->
+      <div class="perfil-conteudo">
+        <!-- Dados Pessoais -->
+        <div *ngIf="activeTab === 'dados'" class="card">
+          <h3>Dados Pessoais</h3>
+          <p>Atualize suas informações e saiba como elas são utilizadas.</p>
 
-                <!-- Foto do Perfil -->
-                <div class="perfil-foto-card">
-                    <img class="perfil-foto" src="assets/carlos.jpg" alt="Foto do Perfil">
-                    <button class="btn-action btn-foto">Alterar Foto</button>
-                </div>
+          <!-- Foto do Perfil -->
+          <div class="perfil-foto-card">
+            <img class="perfil-foto" [src]="fotoPerfil" alt="Foto do Perfil">
+            <input type="file" (change)="onFotoSelecionada($event)" />
+          </div>
 
-                <div class="perfil-info">
-                    <label>Nome</label>
-                    <span>Carlos Silva</span>
-                    <a href="#">Editar</a>
-                </div>
+          <div class="perfil-info">
+            <label>Nome</label>
+            <span>{{ nome }}</span>
+            <a href="#" (click)="editarCampo('nome', nome)">Editar</a>
+          </div>
 
-                <div class="perfil-info">
-                    <label>Email</label>
-                    <span>carlos@email.com</span>
-                    <a href="#">Editar</a>
-                </div>
+          <div class="perfil-info">
+            <label>Email</label>
+            <span>{{ email }}</span>
+            <a href="#" (click)="editarCampo('email', email)">Editar</a>
+          </div>
 
-                <div class="perfil-info">
-                    <label>Telefone</label>
-                    <span>(15) 3238-188</span>
-                    <a href="#">Editar</a>
-                </div>
+          <div class="perfil-info">
+            <label>Telefone</label>
+            <span>{{ telefone }}</span>
+            <a href="#" (click)="editarCampo('telefone', telefone)">Editar</a>
+          </div>
 
-                <div class="perfil-info">
-                    <label>Endereço</label>
-                    <span>Rodovia Senador José Ermirio de Moraes, 1425 - Sorocaba, SP</span>
-                    <a href="#">Editar</a>
-                </div>
-            </div>
-
-            <!-- Segurança -->
-            <div *ngIf="activeTab === 'seguranca'" class="card">
-                <h3>Configurações de Segurança</h3>
-                <p>Altere sua senha e configure autenticação de dois fatores.</p>
-                <div class="btn-group">
-                    <button class="btn-action">Alterar Senha</button>
-                    <button class="btn-action">Ativar 2FA</button>
-                </div>
-            </div>
-
-            <!-- Pagamento -->
-            <div *ngIf="activeTab === 'pagamento'" class="card">
-                <h3>Formas de Pagamento</h3>
-                <p>Gerencie seus cartões e métodos de pagamento.</p>
-                <div class="btn-group">
-                    <button class="btn-action">Adicionar Cartão</button>
-                    <button class="btn-action">Remover Cartão</button>
-                </div>
-            </div>
+          <div class="perfil-info">
+            <label>Endereço</label>
+            <span>{{ endereco }}</span>
+            <a href="#" (click)="editarCampo('endereco', endereco)">Editar</a>
+          </div>
         </div>
+
+        <!-- Segurança -->
+        <div *ngIf="activeTab === 'seguranca'" class="card">
+          <h3>Configurações de Segurança</h3>
+          <p>Altere sua senha e configure autenticação de dois fatores.</p>
+          <div class="btn-group">
+            <button class="btn-action" (click)="alterarSenha()">Alterar Senha</button>
+            <button class="btn-action" (click)="ativar2FA()">Ativar 2FA</button>
+          </div>
+        </div>
+
+        <!-- Pagamento -->
+        <div *ngIf="activeTab === 'pagamento'" class="card">
+          <h3>Formas de Pagamento</h3>
+          <p>Gerencie seus cartões e métodos de pagamento.</p>
+          <div class="btn-group">
+            <button class="btn-action" (click)="adicionarCartao()">Adicionar Cartão</button>
+            <button class="btn-action" (click)="removerCartao()">Remover Cartão</button>
+          </div>
+        </div>
+      </div>
     </div>
-</main>
+  </main>
