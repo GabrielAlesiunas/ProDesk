@@ -207,6 +207,16 @@ app.delete('/api/usuarios/:id/cartoes/:cartaoId', (req, res) => {
   });
 });
 
+// GET /api/usuarios/:id/cartoes
+app.get('/api/usuarios/:id/cartoes', (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT id, numero, nome AS titular, validade FROM cartoes WHERE usuario_id = ?';
+  db.query(query, [id], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erro ao buscar cartões.' });
+    res.json(results);
+  });
+});
+
 // ========================
 // Rotas de espaços e avaliações
 // ========================

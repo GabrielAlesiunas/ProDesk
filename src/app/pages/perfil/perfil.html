@@ -1,6 +1,6 @@
 <!-- MENU SUPERIOR -->
 <div class="page-container">
-  <<header class="menu">
+  <header class="menu">
     <h1>ProDesk Coworking</h1>
     <nav>
       <a routerLink="/locatorio" routerLinkActive="ativo">Espaços</a>
@@ -15,119 +15,177 @@
       <span class="user-name" style="margin-right: 8px;">{{ usuarioNome }}</span>
       <img class="user-avatar" [src]="usuarioFoto" alt="Usuário" style="width: 40px; height: 40px; border-radius: 50%;">
     </a>
-    </header>
+  </header>
 
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="page-container perfil-container">
-      <h2>Meu Perfil</h2>
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="page-container perfil-container">
+    <h2>Meu Perfil</h2>
 
-      <div class="perfil-wrapper">
-        <!-- MENU LATERAL -->
-        <aside class="perfil-menu">
-          <ul>
-            <li [class.active]="activeTab === 'dados'" (click)="selectTab('dados')">
-              <i class="icon-user"></i> Dados Pessoais
-            </li>
-            <li [class.active]="activeTab === 'seguranca'" (click)="selectTab('seguranca')">
-              <i class="icon-lock"></i> Segurança
-            </li>
-            <li [class.active]="activeTab === 'pagamento'" (click)="selectTab('pagamento')">
-              <i class="icon-credit-card"></i> Pagamento
-            </li>
-          </ul>
-        </aside>
+    <div class="perfil-wrapper">
+      <!-- MENU LATERAL -->
+      <aside class="perfil-menu">
+        <ul>
+          <li [class.active]="activeTab === 'dados'" (click)="selectTab('dados')">
+            <i class="icon-user"></i> Dados Pessoais
+          </li>
+          <li [class.active]="activeTab === 'seguranca'" (click)="selectTab('seguranca')">
+            <i class="icon-lock"></i> Segurança
+          </li>
+          <li [class.active]="activeTab === 'pagamento'" (click)="selectTab('pagamento')">
+            <i class="icon-credit-card"></i> Pagamento
+          </li>
+        </ul>
+      </aside>
 
-        <!-- CONTEÚDO DAS ABAS -->
-        <div class="perfil-conteudo">
-          <!-- Dados Pessoais -->
-          <div *ngIf="activeTab === 'dados'" class="card">
-            <h3>Dados Pessoais</h3>
-            <p>Atualize suas informações e saiba como elas são utilizadas.</p>
+      <!-- CONTEÚDO DAS ABAS -->
+      <div class="perfil-conteudo">
+        <!-- Dados Pessoais -->
+        <div *ngIf="activeTab === 'dados'" class="card">
+          <h3>Dados Pessoais</h3>
+          <p>Atualize suas informações e saiba como elas são utilizadas.</p>
 
-            <!-- Foto do Perfil -->
-            <div class="perfil-foto-card">
-              <img class="perfil-foto" [src]="fotoPerfil" alt="Foto do Perfil">
-              <input type="file" (change)="onFotoSelecionada($event)" />
-            </div>
-
-            <!-- Nome -->
-            <div class="perfil-info">
-              <label>Nome</label>
-              <ng-container *ngIf="!editando['nome']; else editNome">
-                <span>{{ nome }}</span>
-                <a href="#" (click)="editarCampo('nome'); $event.preventDefault()">Editar</a>
-              </ng-container>
-              <ng-template #editNome>
-                <input [(ngModel)]="nome" />
-                <button (click)="salvarCampo('nome', nome)">Salvar</button>
-                <button (click)="cancelarEdicao('nome')">Cancelar</button>
-              </ng-template>
-            </div>
-
-            <!-- Email -->
-            <div class="perfil-info">
-              <label>Email</label>
-              <ng-container *ngIf="!editando['email']; else editEmail">
-                <span>{{ email }}</span>
-                <a href="#" (click)="editarCampo('email'); $event.preventDefault()">Editar</a>
-              </ng-container>
-              <ng-template #editEmail>
-                <input [(ngModel)]="email" />
-                <button (click)="salvarCampo('email', email)">Salvar</button>
-                <button (click)="cancelarEdicao('email')">Cancelar</button>
-              </ng-template>
-            </div>
-
-            <!-- Telefone -->
-            <div class="perfil-info">
-              <label>Telefone</label>
-              <ng-container *ngIf="!editando['telefone']; else editTelefone">
-                <span>{{ telefone }}</span>
-                <a href="#" (click)="editarCampo('telefone'); $event.preventDefault()">Editar</a>
-              </ng-container>
-              <ng-template #editTelefone>
-                <input [(ngModel)]="telefone" />
-                <button (click)="salvarCampo('telefone', telefone)">Salvar</button>
-                <button (click)="cancelarEdicao('telefone')">Cancelar</button>
-              </ng-template>
-            </div>
-
-            <!-- Endereço -->
-            <div class="perfil-info">
-              <label>Endereço</label>
-              <ng-container *ngIf="!editando['endereco']; else editEndereco">
-                <span>{{ endereco }}</span>
-                <a href="#" (click)="editarCampo('endereco'); $event.preventDefault()">Editar</a>
-              </ng-container>
-              <ng-template #editEndereco>
-                <input [(ngModel)]="endereco" />
-                <button (click)="salvarCampo('endereco', endereco)">Salvar</button>
-                <button (click)="cancelarEdicao('endereco')">Cancelar</button>
-              </ng-template>
-            </div>
+          <!-- Foto do Perfil -->
+          <div class="perfil-foto-card">
+            <img class="perfil-foto" [src]="fotoPerfil" alt="Foto do Perfil">
+            <input type="file" (change)="onFotoSelecionada($event)" />
           </div>
 
-          <!-- Segurança -->
-          <div *ngIf="activeTab === 'seguranca'" class="card">
-            <h3>Configurações de Segurança</h3>
-            <p>Altere sua senha e configure autenticação de dois fatores.</p>
-            <div class="btn-group">
-              <button class="btn-action" (click)="alterarSenha()">Alterar Senha</button>
-              <button class="btn-action" (click)="ativar2FA()">Ativar 2FA</button>
-            </div>
+          <!-- Nome -->
+          <div class="perfil-info">
+            <label>Nome</label>
+            <ng-container *ngIf="!editando['nome']; else editNome">
+              <span>{{ nome }}</span>
+              <a href="#" (click)="editarCampo('nome'); $event.preventDefault()">Editar</a>
+            </ng-container>
+            <ng-template #editNome>
+              <input [(ngModel)]="nome" />
+              <button (click)="salvarCampo('nome', nome)">Salvar</button>
+              <button (click)="cancelarEdicao('nome')">Cancelar</button>
+            </ng-template>
           </div>
 
-          <!-- Pagamento -->
-          <div *ngIf="activeTab === 'pagamento'" class="card">
-            <h3>Formas de Pagamento</h3>
-            <p>Gerencie seus cartões e métodos de pagamento.</p>
-            <div class="btn-group">
-              <button class="btn-action" (click)="adicionarCartao()">Adicionar Cartão</button>
-              <button class="btn-action" (click)="removerCartao()">Remover Cartão</button>
+          <!-- Email -->
+          <div class="perfil-info">
+            <label>Email</label>
+            <ng-container *ngIf="!editando['email']; else editEmail">
+              <span>{{ email }}</span>
+              <a href="#" (click)="editarCampo('email'); $event.preventDefault()">Editar</a>
+            </ng-container>
+            <ng-template #editEmail>
+              <input [(ngModel)]="email" />
+              <button (click)="salvarCampo('email', email)">Salvar</button>
+              <button (click)="cancelarEdicao('email')">Cancelar</button>
+            </ng-template>
+          </div>
+
+          <!-- Telefone -->
+          <div class="perfil-info">
+            <label>Telefone</label>
+            <ng-container *ngIf="!editando['telefone']; else editTelefone">
+              <span>{{ telefone }}</span>
+              <a href="#" (click)="editarCampo('telefone'); $event.preventDefault()">Editar</a>
+            </ng-container>
+            <ng-template #editTelefone>
+              <input [(ngModel)]="telefone" />
+              <button (click)="salvarCampo('telefone', telefone)">Salvar</button>
+              <button (click)="cancelarEdicao('telefone')">Cancelar</button>
+            </ng-template>
+          </div>
+
+          <!-- Endereço -->
+          <div class="perfil-info">
+            <label>Endereço</label>
+            <ng-container *ngIf="!editando['endereco']; else editEndereco">
+              <span>{{ endereco }}</span>
+              <a href="#" (click)="editarCampo('endereco'); $event.preventDefault()">Editar</a>
+            </ng-container>
+            <ng-template #editEndereco>
+              <input [(ngModel)]="endereco" />
+              <button (click)="salvarCampo('endereco', endereco)">Salvar</button>
+              <button (click)="cancelarEdicao('endereco')">Cancelar</button>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Segurança -->
+        <div *ngIf="activeTab === 'seguranca'" class="card">
+          <h3>Configurações de Segurança</h3>
+          <p>Altere sua senha e configure autenticação de dois fatores.</p>
+          <div class="btn-group">
+            <button class="btn-action" (click)="alterarSenha()">Alterar Senha</button>
+            <button class="btn-action" (click)="ativar2FA()">Ativar 2FA</button>
+          </div>
+        </div>
+
+        <!-- Pagamento -->
+        <div *ngIf="activeTab === 'pagamento'" class="card">
+          <h3>Formas de Pagamento</h3>
+          <p>Gerencie seus cartões e métodos de pagamento.</p>
+
+          <!-- Lista de cartões -->
+          <h4>Seus Cartões:</h4>
+          <div *ngIf="cartoes.length === 0">
+            Nenhum cartão cadastrado.
+          </div>
+
+          <div *ngFor="let cartao of cartoes" class="cartao-item">
+            <input type="radio" name="cartaoSelecionado" [value]="cartao.id" [(ngModel)]="cartaoSelecionadoId"
+              id="cartao{{cartao.id}}">
+            <label for="cartao{{cartao.id}}">
+              **** **** **** {{ cartao.numero.slice(-4) }} - {{ cartao.titular }}
+              (Validade: {{ cartao.validade }})
+            </label>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn-action" (click)="adicionarCartao()">Adicionar Cartão</button>
+            <button class="btn-action" [disabled]="!cartaoSelecionadoId" (click)="removerCartao()">Remover Cartão</button>
+          </div>
+        </div>
+
+        <!-- Modal de adicionar cartão -->
+        <div class="modal" *ngIf="modalCartaoAberto">
+          <div class="modal-content">
+            <h3>Adicionar Cartão</h3>
+
+            <!-- Preview do cartão -->
+            <div class="cartao-preview">
+              <div class="cartao">
+                <div class="numero">{{ previewCartao.numeroFormatado || '#### #### #### ####' }}</div>
+                <div class="titular">{{ previewCartao.titular || 'NOME DO TITULAR' }}</div>
+                <div class="validade">{{ previewCartao.validade || 'MM/AA' }}</div>
+              </div>
+            </div>
+
+            <!-- Inputs -->
+            <div class="inputs">
+              <label>Número do Cartão</label>
+              <input type="text" [(ngModel)]="previewCartao.numero" (ngModelChange)="onNumeroCartaoChange($event)"
+                maxlength="19" inputmode="numeric" placeholder="1234 5678 9012 3456" aria-label="Número do cartão" />
+
+              <label>Validade (MM/AA)</label>
+              <input type="text" [(ngModel)]="previewCartao.validade" (ngModelChange)="onValidadeChange($event)"
+                maxlength="5" inputmode="numeric" placeholder="MM/AA" aria-label="Validade" />
+
+              <label>Titular</label>
+              <input type="text" [(ngModel)]="previewCartao.titular" placeholder="Nome do Titular" />
+
+              <label>CVV</label>
+              <input type="text" [(ngModel)]="previewCartao.cvv" (input)="onCvvChange($event.target.value)"
+                maxlength="3" inputmode="numeric" placeholder="123" />
+            </div>
+
+            <!-- Botões -->
+            <div class="modal-actions">
+              <button class="btn-save" (click)="salvarCartao()">Salvar</button>
+              <button class="btn-cancel" (click)="modalCartaoAberto = false">Cancelar</button>
             </div>
           </div>
         </div>
+
       </div>
-    </main>
+    </div>
+  </main>
+</div>

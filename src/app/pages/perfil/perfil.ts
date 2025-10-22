@@ -15,8 +15,23 @@ export class Perfil implements OnInit {
   activeTab: 'dados' | 'seguranca' | 'pagamento' = 'dados';
   usuarioId: number = 0;
 
-  usuarioNome: string = '';
-  usuarioFoto: string = '';
+  usuarioNome = '';
+  usuarioFoto = '';
+
+  // Modal de cartão
+  modalCartaoAberto = false;
+
+  // Preview do cartão em tempo real
+  previewCartao: any = {
+    numero: '',
+    numeroFormatado: '',
+    titular: '',
+    validade: '',
+    cvv: ''
+  };
+
+  cartoes: any[] = [];           // Lista de cartões do usuário
+  cartaoSelecionadoId: number | null = null; // Cartão selecionado
 
   // Dados do usuário
   nome = '';
@@ -34,7 +49,6 @@ export class Perfil implements OnInit {
   ngOnInit(): void {
     const usuario = localStorage.getItem('usuarioLogado');
     if (!usuario) {
-      // Redireciona para login se não tiver logado
       this.router.navigate(['/login']);
       return;
     }
@@ -45,6 +59,7 @@ export class Perfil implements OnInit {
     this.usuarioFoto = dados.foto || '';
 
     this.carregarDadosUsuario();
+    this.carregarCartoes();
   }
 
   carregarDadosUsuario() {
@@ -57,7 +72,6 @@ export class Perfil implements OnInit {
         this.endereco = usuario.endereco;
         this.fotoPerfil = usuario.foto || this.fotoPerfil;
 
-        // Atualiza localStorage
         localStorage.setItem('usuarioLogado', JSON.stringify({
           id: usuario.id,
           nome: usuario.nome,
@@ -73,12 +87,10 @@ export class Perfil implements OnInit {
     this.activeTab = tab;
   }
 
-  // Ativa edição inline
   editarCampo(campo: 'nome' | 'email' | 'telefone' | 'endereco') {
     this.editando[campo] = true;
   }
 
-  // Salva edição inline
   salvarCampo(campo: 'nome' | 'email' | 'telefone' | 'endereco', valor: string) {
     if (!valor || valor.trim() === '') return;
 
@@ -90,7 +102,6 @@ export class Perfil implements OnInit {
         (this as any)[campo] = valor.trim();
         this.editando[campo] = false;
 
-        // Atualiza localStorage
         const usuario = localStorage.getItem('usuarioLogado');
         if (usuario) {
           const usuarioData = JSON.parse(usuario);
@@ -107,6 +118,12 @@ export class Perfil implements OnInit {
     this.editando[campo] = false;
   }
 
+  // Valida e formata CVV
+  onCvvChange(valor: string) {
+    this.previewCartao.cvv = valor.replace(/\D/g, '').slice(0, 3);
+  }
+
+  // Atualiza foto do usuário
   onFotoSelecionada(event: any) {
     const arquivo: File = event.target.files[0];
     if (!arquivo) return;
@@ -116,7 +133,6 @@ export class Perfil implements OnInit {
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.fotoPerfil = e.target.result;
-
           const usuario = localStorage.getItem('usuarioLogado');
           if (usuario) {
             const usuarioData = JSON.parse(usuario);
@@ -147,25 +163,75 @@ export class Perfil implements OnInit {
   }
 
   adicionarCartao() {
-    const numero = prompt('Número do cartão:');
-    const validade = prompt('Validade (MM/AA):');
-    const titular = prompt('Titular:');
-    const cvv = prompt('CVV:');
-    if (numero && validade && titular && cvv) {
-      this.perfilService.adicionarCartao(this.usuarioId, { numero, validade, titular, cvv }).subscribe({
-        next: () => alert('Cartão adicionado!'),
-        error: err => alert(`Erro ao adicionar cartão: ${err.error?.message || err.message}`)
-      });
+    this.modalCartaoAberto = true;
+    this.previewCartao = { numero: '', numeroFormatado: '', titular: '', validade: '', cvv: '' };
+  }
+
+  // Formata número do cartão a cada 4 dígitos e limita a 16
+  onNumeroCartaoChange(valor: string) {
+    const apenasDigitos = valor.replace(/\D/g, '').slice(0, 16);
+    this.previewCartao.numero = apenasDigitos;
+    this.previewCartao.numeroFormatado = apenasDigitos.replace(/(\d{4})(?=\d)/g, '$1 ');
+  }
+
+  // Formata validade como MM/AA
+  onValidadeChange(valor: string) {
+    let apenasDigitos = valor.replace(/\D/g, '').slice(0, 4);
+    if (apenasDigitos.length >= 3) {
+      this.previewCartao.validade = apenasDigitos.slice(0, 2) + '/' + apenasDigitos.slice(2);
+    } else {
+      this.previewCartao.validade = apenasDigitos;
     }
   }
 
-  removerCartao() {
-    const cartaoId = prompt('ID do cartão a remover:');
-    if (cartaoId) {
-      this.perfilService.removerCartao(this.usuarioId, Number(cartaoId)).subscribe({
-        next: () => alert('Cartão removido!'),
-        error: err => alert(`Erro ao remover cartão: ${err.error?.message || err.message}`)
-      });
+  salvarCartao() {
+    const { numero, titular, validade, cvv } = this.previewCartao;
+
+    if (!numero || !titular || !validade || !cvv) {
+      return alert('Preencha todos os campos.');
     }
+
+    const cartaoParaEnvio = {
+      numero: numero.replace(/\s/g, ''), // remove espaços
+      nome: titular,
+      validade,
+      cvv
+    };
+
+    this.perfilService.adicionarCartao(this.usuarioId, cartaoParaEnvio).subscribe({
+      next: () => {
+        alert('Cartão adicionado com sucesso!');
+        this.modalCartaoAberto = false;
+        this.carregarCartoes(); // ← Atualiza a lista
+      },
+      error: err => alert(`Erro ao adicionar cartão: ${err.error?.message || err.message}`)
+    });
   }
+
+  carregarCartoes() {
+    this.perfilService.obterCartoes(this.usuarioId).subscribe({
+      next: (cartoes: any[]) => {
+        this.cartoes = cartoes;
+      },
+      error: err => console.error('Erro ao carregar cartões:', err)
+    });
+  }
+
+
+  removerCartao() {
+    if (!this.cartaoSelecionadoId) {
+      return alert('Selecione um cartão para remover.');
+    }
+
+    this.perfilService.removerCartao(this.usuarioId, this.cartaoSelecionadoId).subscribe({
+      next: () => {
+        alert('Cartão removido com sucesso!');
+        // Atualiza a lista
+        this.carregarCartoes();
+        this.cartaoSelecionadoId = null;
+      },
+      error: err => alert(`Erro ao remover cartão: ${err.error?.message || err.message}`)
+    });
+  }
+
 }
