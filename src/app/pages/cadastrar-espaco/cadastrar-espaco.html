@@ -3,21 +3,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastrar Espaço - ProDesk</title>
 </head>
+
 <body>
   <div class="page-container">
     <!-- ====== HEADER ====== -->
     <header class="menu">
       <h1>ProDesk Coworking</h1>
       <nav>
-        <a href="#">Espaços</a>
-        <a href="#">Reservas</a>
-        <a href="#">Contato</a>
-        <a href="#">Cadastrar espaço</a>
+        <a routerLink="/locatorio" routerLinkActive="ativo">Espaços</a>
+        <a routerLink="/reserva" routerLinkActive="ativo">Reservas</a>
+        <a routerLink="/contato" routerLinkActive="ativo">Contato</a>
+        <a routerLink="/cadastrar-espaco" routerLinkActive="ativo">Cadastrar espaço</a>
       </nav>
 
-      <div class="user-area">
-        <span class="user-name">Carlos</span>
-        <img class="user-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuário">
+      <router-outlet></router-outlet>
+
+      <div class="user-area" *ngIf="usuarioNome">
+        <span class="user-name">{{ usuarioNome }}</span>
+        <img class="user-avatar" [src]="usuarioFoto" alt="Usuário">
       </div>
     </header>
 

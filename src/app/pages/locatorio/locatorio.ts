@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Espacos } from './../../services/espacos';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-locatorio',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './locatorio.html',
   styleUrls: ['./locatorio.css']
 })
@@ -21,9 +22,22 @@ export class Locatorio implements OnInit {
   filtroAvaliacao: string = '';
   filtroPreco: string = '';
 
+  // 👇 Adicionado conforme solicitado
+  usuarioNome: string = '';
+  usuarioFoto: string = '';
+
   constructor(private espacosService: Espacos) {}
 
   ngOnInit() {
+    // 🔹 Recupera nome e foto do usuário logado
+    const usuario = localStorage.getItem('usuarioLogado');
+    if (usuario) {
+      const dados = JSON.parse(usuario);
+      this.usuarioNome = dados.nome;
+      this.usuarioFoto = dados.foto;
+    }
+
+    // 🔹 Busca espaços normalmente
     this.espacosService.getEspacos().subscribe({
       next: (dados) => {
         this.espacos = dados.map(e => ({

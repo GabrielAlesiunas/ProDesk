@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PerfilService } from './../../services/perfil';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './perfil.html',
   styleUrls: ['./perfil.css']
 })
-export class Perfil {
+export class Perfil implements OnInit {
   activeTab: 'dados' | 'seguranca' | 'pagamento' = 'dados';
   usuarioId = 1; // ID do usuário logado
 
@@ -20,7 +21,27 @@ export class Perfil {
   endereco = 'Rodovia Senador José Ermirio de Moraes, 1425 - Sorocaba, SP';
   fotoPerfil = 'assets/carlos.jpg';
 
+  // 👇 Adicionados
+  usuarioNome: string = '';
+  usuarioFoto: string = '';
+
   constructor(private perfilService: PerfilService) {}
+
+  ngOnInit(): void {
+    // 🔹 Pega nome e foto do usuário logado no localStorage
+    const usuario = localStorage.getItem('usuarioLogado');
+    if (usuario) {
+      const dados = JSON.parse(usuario);
+      this.usuarioNome = dados.nome;
+      this.usuarioFoto = dados.foto;
+
+      // Atualiza também os dados do perfil se quiser sincronizar
+      this.nome = dados.nome;
+      this.email = dados.email;
+      this.fotoPerfil = dados.foto || this.fotoPerfil;
+      this.usuarioId = dados.id || this.usuarioId;
+    }
+  }
 
   // Trocar abas
   selectTab(tab: 'dados' | 'seguranca' | 'pagamento') {
@@ -37,7 +58,6 @@ export class Perfil {
         .subscribe({
           next: () => {
             alert(`${campo} atualizado com sucesso!`);
-            // Atualiza o valor local para refletir na tela
             (this as any)[campo] = novoValor;
           },
           error: (err) => alert(`Erro ao atualizar ${campo}: ${err.error?.message || err.message}`)
@@ -53,7 +73,6 @@ export class Perfil {
         .subscribe({
           next: () => {
             alert('Foto atualizada!');
-            // Atualiza a foto local
             const reader = new FileReader();
             reader.onload = (e: any) => this.fotoPerfil = e.target.result;
             reader.readAsDataURL(arquivo);

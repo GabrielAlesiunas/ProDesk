@@ -61,7 +61,8 @@ app.post('/api/login', (req, res) => {
       res.json({
         id: usuario.id,
         nome: usuario.nome,
-        email: usuario.email
+        email: usuario.email,
+        foto: usuario.foto
       });
     });
   });
