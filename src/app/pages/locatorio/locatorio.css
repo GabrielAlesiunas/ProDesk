@@ -27,7 +27,7 @@ body {
   background: rgb(58, 162, 233);
   color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* título à esquerda, usuário à direita */
   align-items: center;
   padding: 15px 40px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -39,9 +39,13 @@ body {
   font-weight: 600;
 }
 
+/* Nav centralizado */
 .menu nav {
   display: flex;
+  justify-content: center; /* centraliza horizontalmente */
+  flex: 1; /* ocupa espaço entre título e usuário */
   gap: 25px;
+  margin: 0 20px;
 }
 
 .menu nav a {
@@ -60,6 +64,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer; /* indica que é clicável */
 }
 
 .user-avatar {
@@ -72,8 +77,8 @@ body {
 
 .user-name {
   font-weight: 500;
+  color: white;
 }
-
 
 /* ====== Buscas e filtros ====== */
 .busca-filtros {
@@ -144,10 +149,10 @@ h2 {
 }
 
 .card-info {
-  background: #f5f9ff; /* cor clara ou semi-transparente */
-  border-top: 2px solid rgb(58, 162, 233); /* borda destacando o card */
+  background: #f5f9ff;
+  border-top: 2px solid rgb(58, 162, 233);
   padding: 15px 20px;
-  margin-top: -5px; /* sobreposição sutil sobre a imagem */
+  margin-top: -5px;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   display: flex;
@@ -386,14 +391,22 @@ h2 {
 }
 
 /* ====== Responsividade ====== */
+@media (max-width: 1024px) {
+  .cards {
+    gap: 20px;
+  }
+}
+
 @media (max-width: 768px) {
   .menu {
     flex-direction: column;
+    align-items: center;
     text-align: center;
+    padding: 15px 20px;
   }
 
   .menu nav {
-    margin-top: 10px;
+    margin: 10px 0;
   }
 
   .menu nav a {

@@ -37,4 +37,11 @@ export class PerfilService {
   removerCartao(usuarioId: number, cartaoId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${usuarioId}/cartoes/${cartaoId}`);
   }
+
+  // Pega os dados do usuário pelo ID
+  obterDados(usuarioId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${usuarioId}`);
+  }
+
+  
 }

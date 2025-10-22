@@ -27,7 +27,7 @@ body {
   background: rgb(58, 162, 233);
   color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Espaço entre título/nav e usuário */
   align-items: center;
   padding: 15px 40px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -39,9 +39,13 @@ body {
   font-weight: 600;
 }
 
+/* Nav centralizado */
 .menu nav {
   display: flex;
+  justify-content: center; /* centraliza horizontalmente */
   gap: 25px;
+  flex: 1; /* ocupa espaço disponível entre h1 e user-area */
+  margin: 0 20px;
 }
 
 .menu nav a {
@@ -60,6 +64,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 }
 
 .user-avatar {
@@ -72,6 +77,7 @@ body {
 
 .user-name {
   font-weight: 500;
+  color: white;
 }
 
 /* ====== FORMULÁRIO ====== */
@@ -136,7 +142,7 @@ input:focus, select:focus, textarea:focus {
   .menu nav {
     flex-direction: column;
     gap: 10px;
-    margin-top: 10px;
+    margin: 10px 0 0 0;
   }
 
   .page-container {

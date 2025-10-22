@@ -15,7 +15,7 @@ body {
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 100px 20px 40px;
+  padding: 20px 20px 40px;
 }
 
 /* ====== MENU SUPERIOR ====== */
@@ -41,7 +41,10 @@ body {
 
 .menu nav {
   display: flex;
+  justify-content: center;
+  flex: 1;
   gap: 25px;
+  margin: 0 20px;
 }
 
 .menu nav a {
@@ -68,10 +71,13 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #fff;
+  cursor: pointer;
 }
 
 .user-name {
   font-weight: 500;
+  color: white;
+  cursor: pointer;
 }
 
 /* ====== MAIN ====== */
@@ -84,67 +90,95 @@ main {
 
 /* Títulos das seções */
 h2 {
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 20px;
-  color: #3aa2e9;
+  color: rgb(58, 162, 233);
+  text-align: center;
 }
 
 /* ====== Cartões de reservas ====== */
 /* Reservas ativas */
 .reserva-card {
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  margin-bottom: 15px;
+  padding: 22px 28px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  margin-bottom: 18px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.reserva-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
 }
 
 /* Histórico de reservas */
 .historico-card {
-  background-color: #f0f0f0;
-  padding: 18px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  padding: 20px 25px;
+  border-radius: 14px;
+  margin-bottom: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+  transition: background 0.3s;
+}
+
+.historico-card:hover {
+  background-color: #f0f2f5;
 }
 
 /* ====== Botões ====== */
 .cancelar-btn {
-  width: 120px;
-  padding: 8px 12px;
+  width: 140px;
+  padding: 10px 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   color: #fff;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
   background-color: #e74c3c;
 }
 
 .cancelar-btn:hover {
   background-color: #c0392b;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* ====== Responsividade ====== */
+@media (max-width: 992px) {
+  .reserva-card, .historico-card {
+    padding: 18px 20px;
+  }
+}
+
 @media (max-width: 768px) {
   .menu {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 15px 20px;
   }
 
   .menu nav {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     margin-top: 10px;
   }
 
   .page-container {
     padding: 120px 15px 40px;
+  }
+
+  main {
+    gap: 30px;
+  }
+
+  .reserva-card, .historico-card {
+    width: 100%;
   }
 }

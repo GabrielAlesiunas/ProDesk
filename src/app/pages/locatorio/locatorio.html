@@ -10,10 +10,12 @@
 
     <router-outlet></router-outlet>
 
-    <div class="user-area" *ngIf="usuarioNome">
-      <span class="user-name">{{ usuarioNome }}</span>
-      <img class="user-avatar" [src]="usuarioFoto" alt="Usuário">
-    </div>
+    <a [routerLink]="'/perfil'" class="user-area" *ngIf="usuarioNome"
+        style="display: flex; align-items: center; text-decoration: none;">
+        <span class="user-name" style="margin-right: 8px;">{{ usuarioNome }}</span>
+        <img class="user-avatar" [src]="usuarioFoto" alt="Usuário"
+          style="width: 40px; height: 40px; border-radius: 50%;">
+    </a>
   </header>
 
   <div class="busca-filtros">

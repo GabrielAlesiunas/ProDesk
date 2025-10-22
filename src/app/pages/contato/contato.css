@@ -15,7 +15,7 @@ body {
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 100px 20px 40px;
+  padding: 40px 20px 40px;
 }
 
 /* ====== MENU SUPERIOR ====== */
@@ -27,7 +27,7 @@ body {
   background: rgb(58, 162, 233);
   color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* título à esquerda, usuário à direita */
   align-items: center;
   padding: 15px 40px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -39,9 +39,13 @@ body {
   font-weight: 600;
 }
 
+/* Nav centralizado */
 .menu nav {
   display: flex;
+  justify-content: center; /* centraliza horizontalmente */
+  flex: 1; /* ocupa espaço entre título e usuário */
   gap: 25px;
+  margin: 0 20px;
 }
 
 .menu nav a {
@@ -60,6 +64,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer; /* indica que é clicável */
 }
 
 .user-avatar {
@@ -72,6 +77,7 @@ body {
 
 .user-name {
   font-weight: 500;
+  color: white;
 }
 
 /* ===== Título ===== */
@@ -95,7 +101,6 @@ body {
 
 /* ===== Formulário ===== */
 .contato-form {
-  /* background: #fff; */
   background: linear-gradient(135deg, #f5f9ff, #e0f3ff);
   padding: 35px 30px;
   border-radius: 20px;
@@ -155,15 +160,15 @@ body {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-
 /* ===== Fale Conosco ===== */
 .fale-conosco{
-    display: flex;
-    justify-content: center;
-    color: rgb(58, 162, 233);
-    font-size: 24px;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  color: rgb(58, 162, 233);
+  font-size: 24px;
+  margin-bottom: 10px;
 }
+
 .info-contato {
   background: linear-gradient(135deg, #f5f9ff, #e0f3ff);
   padding: 30px 25px;
@@ -263,7 +268,7 @@ body {
 .mapa-container {
   margin: 60px auto 40px;
   text-align: center;
-  width: calc(500px + 350px + 50px); /* mesma largura do formulário + contato + espaçamento */
+  width: calc(500px + 350px + 50px);
   max-width: 100%;
 }
 
@@ -346,8 +351,7 @@ body {
   color: rgb(45, 142, 210);
 }
 
-
-/* Responsividade */
+/* ====== Responsividade ====== */
 @media (max-width: 1024px) {
   .contato-wrapper {
     gap: 30px;
@@ -363,5 +367,15 @@ body {
 
   .contato-form, .info-contato {
     width: 90%;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+
+  .menu nav {
+    margin: 10px 0 0 0;
   }
 }
