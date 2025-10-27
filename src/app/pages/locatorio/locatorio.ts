@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Espacos } from './../../services/espacos';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Auth } from './../../services/auth';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 
 @Component({
   selector: 'app-locatorio',
@@ -22,22 +23,37 @@ export class Locatorio implements OnInit {
   filtroAvaliacao: string = '';
   filtroPreco: string = '';
 
-  // 👇 Adicionado conforme solicitado
+  // Usuário logado
   usuarioNome: string = '';
   usuarioFoto: string = '';
 
-  constructor(private espacosService: Espacos) {}
+  constructor(
+    private espacosService: Espacos,
+    private auth: Auth,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    // 🔹 Recupera nome e foto do usuário logado
-    const usuario = localStorage.getItem('usuarioLogado');
+    // Recupera nome e foto do usuário logado
+    const usuario = this.auth.getUsuarioLogado();
     if (usuario) {
-      const dados = JSON.parse(usuario);
-      this.usuarioNome = dados.nome;
-      this.usuarioFoto = dados.foto;
+      this.usuarioNome = usuario.nome;
+      this.usuarioFoto = usuario.foto;
     }
 
-    // 🔹 Busca espaços normalmente
+    // Atualiza se o storage mudar (ex: logout em outro componente)
+    window.addEventListener('storage', () => {
+      const usuario = this.auth.getUsuarioLogado();
+      if (usuario) {
+        this.usuarioNome = usuario.nome;
+        this.usuarioFoto = usuario.foto;
+      } else {
+        this.usuarioNome = '';
+        this.usuarioFoto = '';
+      }
+    });
+
+    // Busca espaços
     this.espacosService.getEspacos().subscribe({
       next: (dados) => {
         this.espacos = dados.map(e => ({
@@ -54,6 +70,12 @@ export class Locatorio implements OnInit {
       },
       error: (err) => console.error('Erro ao buscar espaços:', err)
     });
+  }
+
+  // 🔹 Logout do sistema
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
   }
 
   // Filtra espaços por termo de busca, avaliação e preço

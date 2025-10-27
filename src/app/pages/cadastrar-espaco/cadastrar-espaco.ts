@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastrar-espaco',
@@ -13,6 +13,9 @@ export class CadastrarEspaco implements OnInit {
   usuarioNome: string = '';
   usuarioFoto: string = '';
 
+  // Injetar o Router no construtor
+  constructor(private router: Router) {}
+
   ngOnInit(): void {
     const usuario = localStorage.getItem('usuarioLogado');
     if (usuario) {
@@ -20,5 +23,11 @@ export class CadastrarEspaco implements OnInit {
       this.usuarioNome = dados.nome;
       this.usuarioFoto = dados.foto;
     }
+  }
+
+  // 🔴 Método de logout
+  logout(): void {
+    localStorage.removeItem('usuarioLogado'); // remove os dados do usuário
+    this.router.navigate(['/login']); // redireciona para a página de login
   }
 }

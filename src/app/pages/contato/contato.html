@@ -7,6 +7,7 @@
     <title>Contato - ProDesk Coworking</title>
     <link rel="stylesheet" href="contato.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 
 <body>
@@ -30,6 +31,10 @@
                 <img class="user-avatar" [src]="usuarioFoto" alt="Usuário"
                     style="width: 40px; height: 40px; border-radius: 50%;">
             </a>
+
+            <button *ngIf="usuarioNome" (click)="logout()" class="logout-btn" title="Sair">
+      <i class="fas fa-right-from-bracket"></i>
+    </button>
         </header>
     </div>
 

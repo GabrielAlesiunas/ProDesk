@@ -384,6 +384,25 @@ h2 {
   color: #000;
 }
 
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 12px;
+}
+
+.logout-btn:hover {
+  color: #e74c3c;
+  transform: scale(1.15);
+}
+
+.logout-btn:active {
+  transform: scale(0.95);
+}
+
 /* ====== Animação modal ====== */
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }

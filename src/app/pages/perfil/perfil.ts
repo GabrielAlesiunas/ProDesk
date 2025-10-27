@@ -61,6 +61,11 @@ export class Perfil implements OnInit {
     this.carregarDadosUsuario();
     this.carregarCartoes();
   }
+  
+  logout(): void {
+    localStorage.removeItem('usuarioLogado'); // remove dados do usuário
+    this.router.navigate(['/login']); // redireciona para a tela de login
+  }
 
   carregarDadosUsuario() {
     this.perfilService.obterDados(this.usuarioId).subscribe({
