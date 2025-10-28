@@ -1,0 +1,83 @@
+<!-- reserva-modal.component.html -->
+<div class="modal-backdrop">
+    <div class="modal">
+        <!-- Botão fechar -->
+        <span class="fechar" (click)="fecharModal()">&times;</span>
+
+        <!-- Título -->
+        <h2>Reservar: {{ espaco.nome }}</h2>
+
+        <!-- Data -->
+        <div class="form-group">
+            <label>Data:</label>
+            <input type="date" [(ngModel)]="data" (change)="verificarDisponibilidade()">
+        </div>
+
+        <!-- Hora início -->
+        <div class="form-group">
+            <label>Hora de início:</label>
+            <input type="time" [(ngModel)]="horaInicio" (change)="calcularPreco(); verificarDisponibilidade()">
+        </div>
+
+        <!-- Hora fim -->
+        <div class="form-group">
+            <label>Hora de fim:</label>
+            <input type="time" [(ngModel)]="horaFim" (change)="calcularPreco(); verificarDisponibilidade()">
+        </div>
+
+        <!-- Disponibilidade -->
+        <div class="disponibilidade">
+            <span *ngIf="carregando">⏳ Verificando disponibilidade...</span>
+            <span *ngIf="disponivel && !carregando" style="color:green;">✅ Horário disponível</span>
+            <span *ngIf="disponivel === false && !carregando" style="color:red;">❌ Horário indisponível</span>
+        </div>
+
+        <!-- Preço -->
+        <div class="form-group">
+            <label>Preço total:</label>
+            <p>R$ {{ precoTotal | number:'1.2-2' }}</p>
+        </div>
+
+        <!-- Forma de pagamento -->
+        <div class="form-group">
+            <label>Forma de pagamento:</label>
+            <select [(ngModel)]="formaPagamento" (change)="onFormaPagamentoChange()">
+                <option *ngFor="let fp of formasPagamento" [value]="fp">{{ fp }}</option>
+            </select>
+        </div>
+
+        <!-- Cartão -->
+        <div *ngIf="formaPagamento === 'Cartão'" class="pagamento-cartao">
+            <label>Selecione o cartão:</label>
+            <select [(ngModel)]="cartaoSelecionado">
+                <option *ngFor="let cartao of cartoesUsuario" [ngValue]="cartao">
+                    {{ cartao.numeroMask }} — {{ cartao.titular }}
+                </option>
+            </select>
+
+            <div *ngIf="cartaoSelecionado" class="cartao-preview">
+                <div><strong>Cartão:</strong> {{ cartaoSelecionado.numeroMask }}</div>
+                <div><strong>Titular:</strong> {{ cartaoSelecionado.titular }}</div>
+                <div *ngIf="cartaoSelecionado.validade"><strong>Validade:</strong> {{ cartaoSelecionado.validade }}</div>
+            </div>
+        </div>
+
+        <!-- Pix -->
+        <div *ngIf="formaPagamento === 'Pix'" class="pagamento-pix">
+            <p>⏳ Pagamento via Pix - Aguarde a confirmação</p>
+            <img src="assets/qrcode.png" alt="QR Code Pix">
+        </div>
+
+        <!-- Boleto -->
+        <div *ngIf="formaPagamento === 'Boleto'" class="pagamento-boleto">
+            <p>⏳ Pagamento via Boleto - Aguarde a confirmação</p>
+            <img src="assets/boleto.jpg" alt="Código de barras boleto">
+        </div>
+
+        <!-- Botão confirmar pagamento -->
+        <button (click)="confirmarPagamento()" 
+                [disabled]="pagamentoEmProcesso || !disponivel">
+            {{ pagamentoEmProcesso ? 'Processando...' : 'Confirmar Pagamento' }}
+        </button>
+    </div>
+</div>

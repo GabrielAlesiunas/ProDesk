@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 23/10/2025 às 01:37
+-- Tempo de geração: 28/10/2025 às 16:38
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -85,14 +85,11 @@ INSERT INTO `espacos` (`id`, `nome`, `descricao`, `imagem`, `avaliacao`, `precoH
 (2, 'Hub Criativo', 'Ambiente colaborativo para startups.', 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80', 4.7, 22.00, 4, '[]', '[]'),
 (4, 'Espaço Verde', 'Coworking com áreas ao ar livre e ambiente sustentável.', 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=900&q=80', 4.9, 28.00, 4, '[]', '[]'),
 (5, 'Open Office', 'Sala ampla com estações flexíveis e ótima iluminação.', 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=80', 4.6, 30.00, 4, '[]', '[]'),
-(6, 'Sala de Reunião VIP', 'Sala elegante com mesa grande, projetor e conforto total para reuniões importantes.', 'https://images.unsplash.com/photo-1581090700227-d93f0b7f37f7?auto=format&fit=crop&w=900&q=80', 4.9, 40.00, 4, '[]', '[]'),
 (7, 'Estúdio Criativo', 'Espaço para designers e artistas, com luz natural e ambientes inspiradores.', 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80', 4.7, 27.00, 4, '[]', '[]'),
 (8, 'Tech Hub', 'Ambiente voltado para tecnologia, startups e desenvolvedores.', 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80', 4.8, 32.00, 4, '[]', '[]'),
-(9, 'Sala de Treinamento', 'Espaço ideal para workshops, treinamentos e palestras com todos os recursos necessários.', 'https://images.unsplash.com/photo-1560184897-5b21b7a1deda?auto=format&fit=crop&w=900&q=80', 4.6, 29.00, 4, '[]', '[]'),
 (10, 'Espaço Lounge', 'Ambiente descontraído para reuniões informais e networking.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80', 4.5, 20.00, 4, '[]', '[]'),
 (11, 'Coworking Executivo', 'Ambiente corporativo com salas privativas e recepção elegante.', 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80', 4.9, 35.00, 4, '[]', '[]'),
-(12, 'Espaço Colaborativo', 'Área aberta para equipes colaborarem e criarem projetos juntos.', 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80', 4.7, 23.00, 4, '[]', '[]'),
-(13, 'Loft Inspirador', 'Espaço amplo com design moderno, perfeito para freelancers e pequenas equipes.', 'https://images.unsplash.com/photo-1499914485622-a88fac5362f5?auto=format&fit=crop&w=900&q=80', 4.8, 30.00, 4, '[]', '[]');
+(12, 'Espaço Colaborativo', 'Área aberta para equipes colaborarem e criarem projetos juntos.', 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80', 4.7, 23.00, 4, '[]', '[]');
 
 -- --------------------------------------------------------
 
@@ -117,7 +114,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `cpf`, `telefone`, `endereco`, `foto`, `senha`, `criado_em`) VALUES
-(4, 'Gabriel', 'teste@gmail.com', '48109301819', '997671792', 'Rua Atalibio Pire 202', 'http://localhost:3000/uploads/usuario_4.png', '$2b$10$4Fbze8g2JbltnRlZvX2mAOAleeoHxY/clF0BRCYHJ9uWcaSSg1ZVi', '2025-10-21 15:52:32');
+(4, 'Gabriel', 'teste@gmail.com', '48109301819', '997671792', 'Rua Atalibio Pire 202', 'http://localhost:3000/uploads/usuario_4.png', '$2b$10$KxZZ.O3pfOrezRCfMfWzLuDmVNVF0Ffs.hIb0abClGCspuk.h7I.K', '2025-10-21 15:52:32');
 
 --
 -- Índices para tabelas despejadas
@@ -170,7 +167,7 @@ ALTER TABLE `cartoes`
 -- AUTO_INCREMENT de tabela `espacos`
 --
 ALTER TABLE `espacos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Restrições para tabelas despejadas

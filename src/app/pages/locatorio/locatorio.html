@@ -11,8 +11,7 @@
 
     <router-outlet></router-outlet>
 
-    <a [routerLink]="'/perfil'" class="user-area" *ngIf="usuarioNome"
-      style="display: flex; align-items: center; text-decoration: none;">
+    <a [routerLink]="'/perfil'" class="user-area" *ngIf="usuarioNome" style="display: flex; align-items: center; text-decoration: none;">
       <span class="user-name" style="margin-right: 8px;">{{ usuarioNome }}</span>
       <img class="user-avatar" [src]="usuarioFoto" alt="Usuário" style="width: 40px; height: 40px; border-radius: 50%;">
     </a>
@@ -20,7 +19,6 @@
     <button *ngIf="usuarioNome" (click)="logout()" class="logout-btn" title="Sair">
       <i class="fas fa-right-from-bracket"></i>
     </button>
-
   </header>
 
   <div class="busca-filtros">
@@ -49,16 +47,16 @@
         <div class="avaliacao">⭐ {{ espaco.avaliacao || 0 }} / 5</div>
         <p class="preco">R$ {{ espaco.precoHora || 0 }} / hora</p>
         <button class="ver-mais" (click)="abrirDetalhes(espaco)">Ver mais</button>
+        <button class="reservar" (click)="abrirReserva(espaco)">Reservar agora</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal de detalhes do espaço -->
   <div class="modal" *ngIf="espacoSelecionado">
     <div class="modal-content">
       <span class="fechar" (click)="fecharModal()">&times;</span>
 
-      <!-- Carrossel -->
       <!-- Carrossel -->
       <div class="carousel">
         <img [src]="espacoSelecionado.imagens?.length
@@ -113,8 +111,14 @@
       <ng-template #semOpinioes>
         <p>Nenhuma opinião registrada.</p>
       </ng-template>
-
-      <button class="reservar">Reservar agora</button>
     </div>
   </div>
+
+  <!-- Modal de reserva -->
+  <app-reserva-modal 
+    *ngIf="modalReservaAberto" 
+    [espaco]="espacoParaReserva"
+    [usuarioId]="usuarioId"
+    (fechar)="fecharReserva()">
+  </app-reserva-modal>
 </div>

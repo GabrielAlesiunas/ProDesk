@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Espacos } from './../../services/espacos';
 import { Auth } from './../../services/auth';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { ReservaModal } from '../modal-reserva/modal-reserva';
 
 @Component({
   selector: 'app-locatorio',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, FormsModule, RouterOutlet, RouterLink, RouterLinkActive, ReservaModal],
   templateUrl: './locatorio.html',
   styleUrls: ['./locatorio.css']
 })
@@ -18,6 +19,9 @@ export class Locatorio implements OnInit {
   espacoSelecionado: any = null;
   imagemIndex = 0;
 
+  modalReservaAberto = false; // controla modal de reserva
+  espacoParaReserva: any = null;
+
   // Campos de filtro
   termoBusca: string = '';
   filtroAvaliacao: string = '';
@@ -26,6 +30,7 @@ export class Locatorio implements OnInit {
   // Usuário logado
   usuarioNome: string = '';
   usuarioFoto: string = '';
+  usuarioId: number = 0;
 
   constructor(
     private espacosService: Espacos,
@@ -34,22 +39,25 @@ export class Locatorio implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Recupera nome e foto do usuário logado
+    // Recupera usuário logado
     const usuario = this.auth.getUsuarioLogado();
     if (usuario) {
       this.usuarioNome = usuario.nome;
       this.usuarioFoto = usuario.foto;
+      this.usuarioId = usuario.id;
     }
 
-    // Atualiza se o storage mudar (ex: logout em outro componente)
+    // Atualiza se storage mudar
     window.addEventListener('storage', () => {
       const usuario = this.auth.getUsuarioLogado();
       if (usuario) {
         this.usuarioNome = usuario.nome;
         this.usuarioFoto = usuario.foto;
+        this.usuarioId = usuario.id;
       } else {
         this.usuarioNome = '';
         this.usuarioFoto = '';
+        this.usuarioId = 0;
       }
     });
 
@@ -72,13 +80,13 @@ export class Locatorio implements OnInit {
     });
   }
 
-  // 🔹 Logout do sistema
+  // Logout
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
 
-  // Filtra espaços por termo de busca, avaliação e preço
+  // Filtrar espaços
   filtrarEspacos() {
     let resultado = [...this.espacos];
 
@@ -106,12 +114,12 @@ export class Locatorio implements OnInit {
     this.espacosFiltrados = resultado;
   }
 
-  // Abre modal com detalhes do espaço
+  // Abrir detalhes do espaço
   abrirDetalhes(espaco: any) {
     this.espacoSelecionado = { ...espaco };
     this.imagemIndex = 0;
 
-    // Buscar opiniões do backend
+    // Buscar opiniões
     this.espacosService.getAvaliacoes(espaco.id).subscribe({
       next: (avaliacoes) => {
         this.espacoSelecionado.opinioes = avaliacoes.map(a => ({
@@ -124,12 +132,11 @@ export class Locatorio implements OnInit {
     });
   }
 
-  // Fecha modal
   fecharModal() {
     this.espacoSelecionado = null;
   }
 
-  // Carrossel: próxima imagem
+  // Carrossel
   proximaImagem() {
     if (this.espacoSelecionado?.imagens?.length) {
       this.imagemIndex =
@@ -137,7 +144,6 @@ export class Locatorio implements OnInit {
     }
   }
 
-  // Carrossel: imagem anterior
   anteriorImagem() {
     if (this.espacoSelecionado?.imagens?.length) {
       this.imagemIndex =
@@ -146,12 +152,20 @@ export class Locatorio implements OnInit {
     }
   }
 
-  // Abrir perfil do dono
   abrirPerfil(dono: any) {
-    if (dono) {
-      alert(`Abrindo perfil de ${dono.nome}`);
-    } else {
-      alert('Dono desconhecido');
-    }
+    if (dono) alert(`Abrindo perfil de ${dono.nome}`);
+    else alert('Dono desconhecido');
+  }
+
+  // ====================
+  // Modal de reserva
+  // ====================
+  abrirReserva(espaco: any) {
+    this.espacoParaReserva = espaco;
+    this.modalReservaAberto = true;
+  }
+
+  fecharReserva() {
+    this.modalReservaAberto = false;
   }
 }

@@ -1,0 +1,15 @@
+<div class="modal-backdrop">
+  <div class="modal">
+    <span class="fechar" (click)="fecharModal.emit()">&times;</span>
+
+    <div class="status-icon">
+      <span *ngIf="sucesso" style="color:green; font-size:50px;">✔️</span>
+      <span *ngIf="!sucesso" style="color:red; font-size:50px;">❌</span>
+    </div>
+
+    <h2 *ngIf="sucesso">Pagamento realizado com sucesso!</h2>
+    <h2 *ngIf="!sucesso">Falha no pagamento!</h2>
+
+    <button (click)="voltar()">Voltar aos Espaços</button>
+  </div>
+</div>

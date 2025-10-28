@@ -82,7 +82,7 @@ body {
 /* ====== PAGE CONTAINER ====== */
 .perfil-container h2 {
   text-align: center;
-  color: #0d6efd;
+  color: rgb(58, 162, 233);
   font-size: 34px;
   margin-bottom: 50px;
 }
@@ -102,7 +102,6 @@ body {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 140px;
-  /* abaixo do menu fixo */
 }
 
 .perfil-menu li {
@@ -116,7 +115,7 @@ body {
 .perfil-menu li.active,
 .perfil-menu li:hover {
   background: #e7f1ff;
-  color: #0d6efd;
+  color: rgb(58, 162, 233);
 }
 
 /* Card de Foto do Perfil */
@@ -134,7 +133,7 @@ body {
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #0d6efd;
+  border: 3px solid rgb(58, 162, 233);
   margin-bottom: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -143,7 +142,7 @@ body {
   padding: 8px 18px;
   font-size: 14px;
   border-radius: 6px;
-  background: #0d6efd;
+  background: rgb(58, 162, 233);
   color: #fff;
   border: none;
   cursor: pointer;
@@ -176,7 +175,7 @@ body {
 }
 
 .card h3 {
-  color: #0d6efd;
+  color: rgb(58, 162, 233);
   margin-bottom: 15px;
   font-weight: 600;
 }
@@ -207,7 +206,7 @@ body {
 }
 
 .perfil-info a {
-  color: #0d6efd;
+  color: rgb(58, 162, 233);
   text-decoration: none;
   font-weight: 500;
 }
@@ -223,7 +222,7 @@ body {
 }
 
 .btn-action {
-  background: #0d6efd;
+  background: rgb(58, 162, 233);
   color: #fff;
   border: none;
   padding: 12px 22px;
@@ -234,7 +233,7 @@ body {
 }
 
 .btn-action:hover {
-  background: #0b5ed7;
+  background: rgb(58, 162, 233);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -265,7 +264,6 @@ body {
   animation: slideIn 0.3s forwards;
 }
 
-/* Modal title */
 .modal-content h3 {
   margin: 0;
   font-size: 1.5rem;
@@ -273,7 +271,6 @@ body {
   color: #333;
 }
 
-/* Card preview */
 .cartao-preview {
   display: flex;
   justify-content: center;
@@ -313,7 +310,6 @@ body {
   align-self: flex-end;
 }
 
-/* Inputs */
 .inputs {
   display: flex;
   flex-direction: column;
@@ -339,7 +335,6 @@ body {
   outline: none;
 }
 
-/* Modal action buttons */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -384,7 +379,6 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
-
 .logout-btn {
   background: transparent;
   border: none;
@@ -404,6 +398,208 @@ body {
   transform: scale(0.95);
 }
 
+/* ======== ESTILO PERSONALIZADO – SEÇÃO DE PAGAMENTO ======== */
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.5rem;
+  color: rgb(58, 162, 233);
+}
+
+.card h3::before {
+  content: "💳";
+  font-size: 22px;
+}
+
+.card p {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.card h4 {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.cartao-item {
+  display: flex;
+  align-items: center;
+  background: #f8f9ff;
+  border: 1px solid #dbe3ff;
+  border-radius: 10px;
+  padding: 15px 18px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cartao-item:hover {
+  background: #edf2ff;
+  transform: translateY(-2px);
+}
+
+.cartao-item input[type="radio"] {
+  accent-color: rgb(58, 162, 233);
+  width: 18px;
+  height: 18px;
+  margin-right: 14px;
+  cursor: pointer;
+}
+
+.cartao-item label {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.cartao-item input[type="radio"]:checked + label {
+  color: rgb(58, 162, 233);
+  font-weight: 600;
+}
+
+.card div[ng-reflect-ng-if="true"],
+.card div:has(> [ng-reflect-ng-if="true"]) {
+  color: #777;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+  border: 1px dashed #ccc;
+  font-style: italic;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-action {
+  background: linear-gradient(135deg, rgb(58, 162, 233));
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  padding: 12px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-action:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #3b3fc1, #7278f8);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== MODAL DE ALTERAÇÃO DE SENHA ===== */
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  width: 420px;
+  max-width: 90%;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.3s forwards;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-content h3 {
+  text-align: center;
+  font-size: 1.6rem;
+  color: #0d6efd;
+  margin-bottom: 10px;
+}
+
+.inputs label {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.inputs input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.inputs input:focus {
+  border-color: #0d6efd;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-actions button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-actions button:first-child {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+.modal-actions button:first-child:hover {
+  background-color: #0b5ed7;
+  transform: scale(1.05);
+}
+
+.modal-actions button:last-child {
+  background-color: #ccc;
+  color: #333;
+}
+
+.modal-actions button:last-child:hover {
+  background-color: #b3b3b3;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 992px) {

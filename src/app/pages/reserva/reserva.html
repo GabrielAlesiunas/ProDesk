@@ -31,8 +31,8 @@
       </a>
 
       <button *ngIf="usuarioNome" (click)="logout()" class="logout-btn" title="Sair">
-      <i class="fas fa-right-from-bracket"></i>
-    </button>
+        <i class="fas fa-right-from-bracket"></i>
+      </button>
     </header>
 
     <!-- ====== MAIN ====== -->
@@ -40,32 +40,57 @@
       <!-- Espaços alugados atualmente -->
       <section class="reservas-ativas">
         <h2>Meus Espaços Ativos</h2>
-        <div class="reserva-card">
-          <h3>Espaço Criativo</h3>
-          <p>Data: 22/10/2025</p>
-          <p>Horário: 14:00 - 16:00</p>
-          <button class="cancelar-btn">Cancelar</button>
-        </div>
-        <div class="reserva-card">
-          <h3>Salão de Reuniões</h3>
-          <p>Data: 24/10/2025</p>
-          <p>Horário: 09:00 - 11:00</p>
-          <button class="cancelar-btn">Cancelar</button>
+        <div class="reserva-card ativo">
+          <div class="reserva-info">
+            <h3>Espaço Criativo</h3>
+            <span class="reserva-status">Ativa</span>
+            <p>Local: Sala 2</p>
+            <p>Data: 22/10/2025</p>
+            <p>Horário: 14:00 - 16:00</p>
+            <p>Preço: R$ 120,00</p>
+          </div>
+          <div class="reserva-actions">
+            <button class="detalhes-btn">Detalhes</button>
+            <button class="cancelar-btn">Cancelar</button>
+          </div>
         </div>
       </section>
 
       <!-- Histórico de reservas -->
       <section class="historico-reservas">
         <h2>Histórico de Reservas</h2>
-        <div class="historico-card">
-          <h3>Estúdio de Música</h3>
-          <p>Data: 10/10/2025</p>
-          <p>Horário: 16:00 - 18:00</p>
-        </div>
-        <div class="historico-card">
-          <h3>Auditório</h3>
-          <p>Data: 05/10/2025</p>
-          <p>Horário: 09:00 - 12:00</p>
+
+        <div class="historico-card" *ngFor="let reserva of historicoReservas; let i = index">
+          <div class="reserva-info">
+            <h3>{{ reserva.nome_espaco }}</h3>
+            <span class="reserva-status finalizada">Finalizada</span>
+            <p>Local: {{ reserva.local }}</p>
+            <p>Data: {{ reserva.data }}</p>
+            <p>Horário: {{ reserva.horario }}</p>
+            <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
+          </div>
+
+          <div class="reserva-actions">
+            <button class="repetir-btn">Reservar Novamente</button>
+            <button *ngIf="!avaliado[i]" class="avaliar-btn" (click)="abrirFormAvaliacao(i)">Avaliar</button>
+          </div>
+
+          <!-- Formulário de avaliação -->
+          <div class="form-avaliacao" *ngIf="avaliando[i]">
+            <label>Nota:</label>
+            <div class="estrelas">
+              <i *ngFor="let s of [1,2,3,4,5]" 
+                 class="fa-star" 
+                 [ngClass]="nota[i] >= s ? 'fas' : 'far'" 
+                 (click)="setNota(i, s)"></i>
+            </div>
+
+            <label>Comentário:</label>
+            <textarea [(ngModel)]="comentario[i]" rows="2" placeholder="Escreva seu comentário..."></textarea>
+
+            <button (click)="enviarAvaliacao(i)">Enviar</button>
+            <button (click)="fecharFormAvaliacao(i)" class="cancelar-form">Cancelar</button>
+          </div>
         </div>
       </section>
     </main>

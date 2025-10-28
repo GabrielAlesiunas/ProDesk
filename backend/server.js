@@ -6,11 +6,14 @@ const multer = require('multer');
 const path = require('path');
 
 const app = express();
+
+// Configurações CORS
 app.use(cors({
   origin: 'http://localhost:4200',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type']
 }));
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve fotos
 
@@ -23,15 +26,14 @@ const db = mysql.createConnection({
 });
 
 db.connect(err => {
-  if (err) {
-    console.error('Erro ao conectar:', err);
-  } else {
-    console.log('✅ Conectado ao MySQL!');
-  }
+  if (err) console.error('Erro ao conectar:', err);
+  else console.log('✅ Conectado ao MySQL!');
 });
 
-// Configuração multer para uploads
-const storage = multer.diskStorage({
+// ========================
+// Configuração Multer
+// ========================
+const storageUsuario = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
   },
@@ -40,11 +42,23 @@ const storage = multer.diskStorage({
     cb(null, 'usuario_' + req.params.id + ext);
   }
 });
-const upload = multer({ storage });
+const uploadUsuario = multer({ storage: storageUsuario });
+
+const storageEspaco = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, 'espaco_' + Date.now() + ext);
+  }
+});
+const uploadEspaco = multer({ storage: storageEspaco });
 
 // ========================
 // Rotas de autenticação
 // ========================
+const SALT_ROUNDS = 10;
 
 // POST /api/login
 app.post('/api/login', (req, res) => {
@@ -72,7 +86,6 @@ app.post('/api/login', (req, res) => {
 });
 
 // POST /api/usuarios - cadastrar novo usuário
-const SALT_ROUNDS = 10;
 app.post('/api/usuarios', (req, res) => {
   const { name, email, cpf, password } = req.body;
   if (!name || !email || !cpf || !password) return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
@@ -97,8 +110,6 @@ app.post('/api/usuarios', (req, res) => {
 // ========================
 // Rotas de perfil
 // ========================
-
-// GET /api/usuarios/:id
 app.get('/api/usuarios/:id', (req, res) => {
   const { id } = req.params;
   const query = 'SELECT id, nome, email, telefone, endereco, foto FROM usuarios WHERE id = ?';
@@ -109,7 +120,6 @@ app.get('/api/usuarios/:id', (req, res) => {
   });
 });
 
-// PUT /api/usuarios/:id
 app.put('/api/usuarios/:id', (req, res) => {
   const { id } = req.params;
   const { nome, email, telefone, endereco } = req.body;
@@ -133,12 +143,11 @@ app.put('/api/usuarios/:id', (req, res) => {
   });
 });
 
-// PUT /api/usuarios/:id/foto
-app.put('/api/usuarios/:id/foto', upload.single('foto'), (req, res) => {
+app.put('/api/usuarios/:id/foto', uploadUsuario.single('foto'), (req, res) => {
   const { id } = req.params;
   if (!req.file) return res.status(400).json({ error: 'Arquivo não enviado' });
 
-  const fotoPath = 'http://localhost:3000/' + req.file.path.replace(/\\/g, '/'); // URL pública
+  const fotoPath = 'http://localhost:3000/' + req.file.path.replace(/\\/g, '/');
   const query = 'UPDATE usuarios SET foto = ? WHERE id = ?';
   db.query(query, [fotoPath, id], (err, result) => {
     if (err) return res.status(500).json({ error: 'Erro ao atualizar foto' });
@@ -146,14 +155,11 @@ app.put('/api/usuarios/:id/foto', upload.single('foto'), (req, res) => {
   });
 });
 
-// PUT /api/usuarios/:id/senha
 app.put('/api/usuarios/:id/senha', (req, res) => {
   const { id } = req.params;
   const { senhaAtual, novaSenha } = req.body;
 
-  if (!senhaAtual || !novaSenha) {
-    return res.status(400).json({ error: 'Informe a senha atual e a nova senha.' });
-  }
+  if (!senhaAtual || !novaSenha) return res.status(400).json({ error: 'Informe a senha atual e a nova senha.' });
 
   const query = 'SELECT senha FROM usuarios WHERE id = ?';
   db.query(query, [id], (err, results) => {
@@ -179,14 +185,14 @@ app.put('/api/usuarios/:id/senha', (req, res) => {
   });
 });
 
-// POST /api/usuarios/:id/cartoes
+// ========================
+// Rotas de cartões
+// ========================
 app.post('/api/usuarios/:id/cartoes', (req, res) => {
   const { id } = req.params;
   const { numero, nome, validade, cvv } = req.body;
 
-  if (!numero || !nome || !validade || !cvv) {
-    return res.status(400).json({ error: 'Todos os campos do cartão são obrigatórios.' });
-  }
+  if (!numero || !nome || !validade || !cvv) return res.status(400).json({ error: 'Todos os campos do cartão são obrigatórios.' });
 
   const query = 'INSERT INTO cartoes (usuario_id, numero, nome, validade, cvv) VALUES (?, ?, ?, ?, ?)';
   db.query(query, [id, numero, nome, validade, cvv], (err, result) => {
@@ -195,7 +201,6 @@ app.post('/api/usuarios/:id/cartoes', (req, res) => {
   });
 });
 
-// DELETE /api/usuarios/:id/cartoes/:cartaoId
 app.delete('/api/usuarios/:id/cartoes/:cartaoId', (req, res) => {
   const { id, cartaoId } = req.params;
 
@@ -207,7 +212,6 @@ app.delete('/api/usuarios/:id/cartoes/:cartaoId', (req, res) => {
   });
 });
 
-// GET /api/usuarios/:id/cartoes
 app.get('/api/usuarios/:id/cartoes', (req, res) => {
   const { id } = req.params;
   const query = 'SELECT id, numero, nome AS titular, validade FROM cartoes WHERE usuario_id = ?';
@@ -220,8 +224,6 @@ app.get('/api/usuarios/:id/cartoes', (req, res) => {
 // ========================
 // Rotas de espaços e avaliações
 // ========================
-
-// GET /api/espacos
 app.get('/api/espacos', (req, res) => {
   const query = `
     SELECT e.*, 
@@ -239,7 +241,6 @@ app.get('/api/espacos', (req, res) => {
   });
 });
 
-// GET /api/avaliacoes/:espacoId
 app.get('/api/avaliacoes/:espacoId', (req, res) => {
   const { espacoId } = req.params;
   const query = `
@@ -250,6 +251,157 @@ app.get('/api/avaliacoes/:espacoId', (req, res) => {
   `;
   db.query(query, [espacoId], (err, results) => {
     if (err) return res.status(500).json({ error: 'Erro ao buscar avaliações' });
+    res.json(results);
+  });
+});
+
+// POST /api/espacos - cadastrar novo espaço com imagem
+app.post('/api/espacos', uploadEspaco.single('imagem'), (req, res) => {
+  let { nome, descricao, precoHora, dono_id, comodidades, imagens } = req.body;
+
+  if (!nome || !precoHora || !dono_id) return res.status(400).json({ error: 'Nome, preço e dono são obrigatórios.' });
+
+  const precoHoraNum = Number(precoHora);
+  if (isNaN(precoHoraNum)) return res.status(400).json({ error: 'Preço inválido' });
+
+  const imagemPath = req.file ? 'http://localhost:3000/' + req.file.path.replace(/\\/g, '/') : null;
+
+  try {
+    comodidades = comodidades ? JSON.parse(comodidades) : [];
+    imagens = imagens ? JSON.parse(imagens) : [];
+  } catch (err) {
+    return res.status(400).json({ error: 'Erro ao processar comodidades ou imagens' });
+  }
+
+  const query = `
+    INSERT INTO espacos
+      (nome, descricao, precoHora, dono_id, imagem, comodidades, imagens)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(query, [
+    nome,
+    descricao || '',
+    precoHoraNum,
+    dono_id,
+    imagemPath || '',
+    JSON.stringify(comodidades),
+    JSON.stringify(imagens)
+  ], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Erro ao cadastrar espaço', details: err });
+    res.status(201).json({ message: 'Espaço cadastrado com sucesso!', id: result.insertId });
+  });
+});
+
+// POST /api/avaliacoes - criar nova avaliação
+app.post('/api/avaliacoes', (req, res) => {
+  const { usuario_id, espaco_id, nota, comentario } = req.body;
+
+  if (!usuario_id || !espaco_id || !nota) {
+    return res.status(400).json({ error: 'Campos obrigatórios ausentes!' });
+  }
+
+  const sql = `
+    INSERT INTO avaliacoes
+      (usuario_id, espaco_id, nota, comentario, criado_em)
+    VALUES (?, ?, ?, ?, NOW())
+  `;
+
+  db.query(sql, [usuario_id, espaco_id, nota, comentario], (err, result) => {
+    if (err) {
+      console.error('Erro ao inserir avaliação:', err);
+      return res.status(500).json({ error: 'Erro ao salvar avaliação' });
+    }
+
+    res.status(201).json({ message: 'Avaliação cadastrada com sucesso!', id: result.insertId });
+  });
+});
+
+// POST /api/reservas - criar reserva
+app.post('/api/reservas', (req, res) => {
+  const { usuario_id, espaco_id, data_reserva, hora_inicio, hora_fim, preco, forma_pagamento } = req.body;
+
+  if (!usuario_id || !espaco_id || !data_reserva || !hora_inicio || !hora_fim || !preco || !forma_pagamento) {
+    return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+  }
+
+  // Verifica disponibilidade
+  const disponivelQuery = `
+    SELECT * FROM reservas
+    WHERE espaco_id = ? AND data_reserva = ? 
+      AND (
+        (hora_inicio <= ? AND hora_fim > ?) OR
+        (hora_inicio < ? AND hora_fim >= ?)
+      ) AND status = 'confirmada'
+  `;
+  db.query(disponivelQuery, [espaco_id, data_reserva, hora_inicio, hora_inicio, hora_fim, hora_fim], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erro ao verificar disponibilidade.' });
+    if (results.length > 0) return res.status(400).json({ error: 'Espaço indisponível nesse horário.' });
+
+    // Inserir reserva
+    const insertQuery = `
+      INSERT INTO reservas
+        (usuario_id, espaco_id, data_reserva, hora_inicio, hora_fim, preco, forma_pagamento, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmada')
+    `;
+    db.query(insertQuery, [usuario_id, espaco_id, data_reserva, hora_inicio, hora_fim, preco, forma_pagamento], (err, result) => {
+      if (err) return res.status(500).json({ error: 'Erro ao criar reserva.' });
+      res.status(201).json({ message: 'Reserva criada com sucesso!', id: result.insertId });
+    });
+  });
+});
+
+// GET /api/reservas/usuario/:usuarioId - consultar reservas de um usuário
+app.get('/api/reservas/usuario/:usuarioId', (req, res) => {
+  const { usuarioId } = req.params;
+  const query = `
+    SELECT r.*, e.nome AS espaco_nome, e.imagem AS espaco_imagem
+    FROM reservas r
+    JOIN espacos e ON r.espaco_id = e.id
+    WHERE r.usuario_id = ?
+    ORDER BY r.data_reserva DESC, r.hora_inicio DESC
+  `;
+  db.query(query, [usuarioId], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erro ao buscar reservas.' });
+    res.json(results);
+  });
+});
+
+// GET /api/reservas/disponibilidade/:espacoId?data=YYYY-MM-DD&hora=HH:MM
+app.get('/api/reservas/disponibilidade/:espacoId', (req, res) => {
+  const { espacoId } = req.params;
+  const { data, hora_inicio, hora_fim } = req.query;
+
+  if (!data || !hora_inicio || !hora_fim) {
+    return res.status(400).json({ error: 'Data, hora_inicio e hora_fim são obrigatórios.' });
+  }
+
+  const query = `
+    SELECT * FROM reservas
+    WHERE espaco_id = ?
+      AND data_reserva = ?
+      AND NOT (hora_fim <= ? OR hora_inicio >= ?)
+      AND status = 'confirmada'
+  `;
+
+  db.query(query, [espacoId, data, hora_inicio, hora_fim], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erro ao verificar disponibilidade' });
+    res.json({ disponivel: results.length === 0 });
+  });
+});
+
+// GET /api/reservas/usuario/:usuarioId - consultar reservas de um usuário
+app.get('/api/reservas/usuario/:usuarioId', (req, res) => {
+  const { usuarioId } = req.params;
+  const query = `
+    SELECT r.*, e.nome AS espaco_nome, e.imagem AS espaco_imagem
+    FROM reservas r
+    JOIN espacos e ON r.espaco_id = e.id
+    WHERE r.usuario_id = ?
+    ORDER BY r.data_reserva DESC, r.hora_inicio DESC
+  `;
+  db.query(query, [usuarioId], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erro ao buscar reservas.' });
     res.json(results);
   });
 });

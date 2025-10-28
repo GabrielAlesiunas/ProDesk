@@ -8,11 +8,18 @@ export class Espacos {
 
   constructor(private http: HttpClient) {}
 
+  // Listar espaços
   getEspacos(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
 
-  getAvaliacoes(espacoId: number) {
-  return this.http.get<any[]>(`http://localhost:3000/api/avaliacoes/${espacoId}`);
-}
+  // Cadastrar espaço (FormData suporta arquivos)
+  cadastrarEspaco(dados: FormData): Observable<any> {
+    return this.http.post<any>(this.apiUrl, dados);
+  }
+
+  // Buscar avaliações de um espaço
+  getAvaliacoes(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`http://localhost:3000/api/avaliacoes/${id}`);
+  }
 }

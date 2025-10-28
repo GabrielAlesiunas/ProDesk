@@ -81,54 +81,102 @@ body {
 }
 
 /* ====== FORMULÁRIO ====== */
-h2 {
-  font-size: 20px;
-  margin-bottom: 20px;
+.cadastro-espaco {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.cadastro-espaco h2 {
+  font-size: 24px;
+  margin-bottom: 25px;
   color: #3aa2e9;
+  text-align: center;
 }
 
 form {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 label {
   font-weight: 500;
+  margin-bottom: 5px;
 }
 
 input, select, textarea {
-  padding: 10px;
-  border-radius: 5px;
+  padding: 12px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 14px;
   width: 100%;
+  transition: all 0.3s;
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #3aa2e9;
+  box-shadow: 0 0 5px rgba(58,162,233,0.5);
 }
 
-.cadastrar-btn {
-  width: 150px;
-  padding: 10px 0;
-  border: none;
-  border-radius: 5px;
-  background-color: #27ae60;
-  color: #fff;
-  font-weight: 500;
+button {
   cursor: pointer;
-  transition: background 0.3s;
-  align-self: flex-start;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 500;
+  transition: all 0.3s;
 }
 
-.cadastrar-btn:hover {
-  background-color: #1e8449;
+/* Botões específicos */
+button[type="submit"] {
+  background-color: #3aa2e9;
+  color: #fff;
+  width: 100%;
+}
+
+button[type="submit"]:hover {
+  background-color: #3aa2e9;
+}
+
+button[type="button"] {
+  background-color: #3aa2e9;
+  color: #fff;
+  margin-top: 5px;
+  width: fit-content;
+  padding: 8px 12px;
+}
+
+button[type="button"]:hover {
+  background-color: #1e81c2;
+}
+
+/* Lista de comodidades */
+ul {
+  list-style: none;
+  margin-top: 10px;
+}
+
+ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+ul li button {
+  background-color: #ff4c4c;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+ul li button:hover {
+  background-color: #c0392b;
 }
 
 .logout-btn {
@@ -152,19 +200,7 @@ input:focus, select:focus, textarea:focus {
 
 /* ====== Responsividade ====== */
 @media (max-width: 768px) {
-  .menu {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px 20px;
-  }
-
-  .menu nav {
-    flex-direction: column;
-    gap: 10px;
-    margin: 10px 0 0 0;
-  }
-
   .page-container {
-    padding: 120px 15px 40px;
+    padding: 150px 15px 40px;
   }
 }

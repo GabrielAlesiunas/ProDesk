@@ -11,77 +11,48 @@
   </div>
 
   <!-- Painel de formulário -->
+  <div class="auth-container">
   <div class="auth-card">
-    <div class="auth-logo">
-      <h1>ProDesk</h1>
+    <div class="auth-image">
+      <img src="assets/coworking.svg" alt="Ilustração Coworking" />
     </div>
 
     <h2>Criar Conta</h2>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
-      <!-- Nome -->
       <div class="input-group">
         <i class="fas fa-user"></i>
         <input type="text" formControlName="name" placeholder="Nome completo" />
-        <label>Nome</label>
-        <div class="error" *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.hasError('required')">
-          <i class="fas fa-exclamation-circle"></i> O nome é obrigatório.
-        </div>
       </div>
 
-      <!-- Email -->
       <div class="input-group">
         <i class="fas fa-envelope"></i>
         <input type="email" formControlName="email" placeholder="Email" />
-        <label>Email</label>
-        <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
-          <i class="fas fa-exclamation-circle"></i> Email inválido. Deve conter @ e .com
-        </div>
       </div>
 
-      <!-- CPF -->
       <div class="input-group">
         <i class="fas fa-id-card"></i>
         <input type="text" formControlName="cpf" maxlength="14" placeholder="CPF" />
-        <label>CPF</label>
-        <div class="error" *ngIf="registerForm.get('cpf')?.touched && registerForm.get('cpf')?.invalid">
-          <i class="fas fa-exclamation-circle"></i> CPF inválido.
-        </div>
       </div>
 
-      <!-- Senha -->
       <div class="input-group">
-        <label>Senha</label>
-        <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
-          [class.invalid]="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" />
-        <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
-          (click)="showPassword = !showPassword"></i>
-        <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
-          <i class="fas fa-exclamation-circle"></i> A senha deve ter no mínimo 6 caracteres, incluir letra maiúscula e
-          número.
-        </div>
+        <i class="fas fa-lock"></i>
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Senha" />
+        <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="showPassword = !showPassword"></i>
       </div>
 
-      <!-- Confirmar Senha -->
       <div class="input-group">
-        <label>Confirmar Senha</label>
-        <input [type]="showConfirm ? 'text' : 'password'" formControlName="confirmPassword"
-          [class.invalid]="registerForm.get('confirmPassword')?.touched && registerForm.errors?.['passwordMismatch']" />
-        <i class="fa-solid" [ngClass]="showConfirm ? 'fa-eye-slash' : 'fa-eye'"
-          (click)="showConfirm = !showConfirm"></i>
-        <div class="error"
-          *ngIf="registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched">
-          <i class="fas fa-exclamation-circle"></i> As senhas não coincidem.
-        </div>
+        <i class="fas fa-lock"></i>
+        <input [type]="showConfirm ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Confirmar Senha" />
+        <i class="fa-solid" [ngClass]="showConfirm ? 'fa-eye-slash' : 'fa-eye'" (click)="showConfirm = !showConfirm"></i>
       </div>
 
-      <!-- Botão -->
       <button type="submit" [disabled]="registerForm.invalid">Cadastrar</button>
     </form>
 
     <div class="auth-footer">
-      <a routerLink="/login" class="link">Já tem uma conta? Entrar</a>
+      <a routerLink="/login">Já tem uma conta? Entrar</a>
     </div>
   </div>
+</div>
 </div>

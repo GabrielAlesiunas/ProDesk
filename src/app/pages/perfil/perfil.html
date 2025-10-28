@@ -124,6 +124,30 @@
           </div>
         </div>
 
+        <!-- Modal de Alteração de Senha -->
+        <div class="modal" *ngIf="mostrarModalSenha">
+          <div class="modal-content">
+            <h3>Alterar Senha</h3>
+
+            <div class="inputs">
+              <label for="senhaAtual">Senha atual</label>
+              <input type="password" id="senhaAtual" [(ngModel)]="senhaAtual" placeholder="Digite sua senha atual">
+
+              <label for="novaSenha">Nova senha</label>
+              <input type="password" id="novaSenha" [(ngModel)]="novaSenha" placeholder="Digite a nova senha">
+
+              <label for="confirmarSenha">Confirmar nova senha</label>
+              <input type="password" id="confirmarSenha" [(ngModel)]="confirmarSenha"
+                placeholder="Confirme a nova senha">
+            </div>
+
+            <div class="modal-actions">
+              <button (click)="confirmarAlteracaoSenha()">Salvar</button>
+              <button (click)="fecharModalSenha()">Cancelar</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Pagamento -->
         <div *ngIf="activeTab === 'pagamento'" class="card">
           <h3>Formas de Pagamento</h3>
@@ -146,7 +170,8 @@
 
           <div class="btn-group">
             <button class="btn-action" (click)="adicionarCartao()">Adicionar Cartão</button>
-            <button class="btn-action" [disabled]="!cartaoSelecionadoId" (click)="removerCartao()">Remover Cartão</button>
+            <button class="btn-action" [disabled]="!cartaoSelecionadoId" (click)="removerCartao()">Remover
+              Cartão</button>
           </div>
         </div>
 

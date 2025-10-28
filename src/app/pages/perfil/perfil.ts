@@ -41,6 +41,11 @@ export class Perfil implements OnInit {
   endereco = '';
   fotoPerfil = '';
 
+  mostrarModalSenha = false;
+  senhaAtual = '';
+  novaSenha = '';
+  confirmarSenha = '';
+
   // Edição inline
   editando: { [key: string]: boolean } = {};
 
@@ -61,7 +66,7 @@ export class Perfil implements OnInit {
     this.carregarDadosUsuario();
     this.carregarCartoes();
   }
-  
+
   logout(): void {
     localStorage.removeItem('usuarioLogado'); // remove dados do usuário
     this.router.navigate(['/login']); // redireciona para a tela de login
@@ -153,14 +158,36 @@ export class Perfil implements OnInit {
   }
 
   alterarSenha() {
-    const senhaAtual = prompt('Digite sua senha atual:');
-    const novaSenha = prompt('Digite a nova senha:');
-    if (senhaAtual && novaSenha) {
-      this.perfilService.alterarSenha(this.usuarioId, senhaAtual, novaSenha).subscribe({
-        next: () => alert('Senha alterada com sucesso!'),
-        error: err => alert(`Erro ao alterar senha: ${err.error?.message || err.message}`)
-      });
+    this.mostrarModalSenha = true;
+  }
+
+  fecharModalSenha() {
+    this.mostrarModalSenha = false;
+    this.senhaAtual = '';
+    this.novaSenha = '';
+    this.confirmarSenha = '';
+  }
+
+  confirmarAlteracaoSenha() {
+    if (!this.senhaAtual || !this.novaSenha || !this.confirmarSenha) {
+      alert('Por favor, preencha todos os campos.');
+      return;
     }
+
+    if (this.novaSenha !== this.confirmarSenha) {
+      alert('As novas senhas não coincidem!');
+      return;
+    }
+
+    this.perfilService.alterarSenha(this.usuarioId, this.senhaAtual, this.novaSenha).subscribe({
+      next: () => {
+        alert('Senha alterada com sucesso!');
+        this.fecharModalSenha();
+      },
+      error: err => {
+        alert(`Erro ao alterar senha: ${err.error?.message || err.message}`);
+      }
+    });
   }
 
   ativar2FA() {
