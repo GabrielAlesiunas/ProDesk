@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 28/10/2025 às 16:38
+-- Tempo de geração: 31/10/2025 às 18:23
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -94,6 +94,37 @@ INSERT INTO `espacos` (`id`, `nome`, `descricao`, `imagem`, `avaliacao`, `precoH
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `reservas`
+--
+
+CREATE TABLE `reservas` (
+  `id` int(11) NOT NULL,
+  `usuario_id` int(11) NOT NULL,
+  `espaco_id` int(11) NOT NULL,
+  `data_reserva` date NOT NULL,
+  `hora_inicio` time NOT NULL,
+  `hora_fim` time NOT NULL,
+  `preco` decimal(10,2) NOT NULL,
+  `forma_pagamento` enum('cartao','pix','boleto') NOT NULL,
+  `status` enum('pendente','confirmada','cancelada') DEFAULT 'pendente',
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `reservas`
+--
+
+INSERT INTO `reservas` (`id`, `usuario_id`, `espaco_id`, `data_reserva`, `hora_inicio`, `hora_fim`, `preco`, `forma_pagamento`, `status`, `criado_em`, `atualizado_em`) VALUES
+(1, 4, 1, '2025-10-30', '08:00:00', '10:00:00', 500.00, 'cartao', 'confirmada', '2025-10-28 16:50:00', '2025-10-28 16:50:00'),
+(2, 4, 1, '2025-10-29', '10:00:00', '11:00:00', 250.00, 'cartao', 'confirmada', '2025-10-28 17:19:34', '2025-10-28 17:19:34'),
+(3, 4, 4, '2025-11-01', '22:00:00', '23:40:00', 46.67, 'cartao', 'confirmada', '2025-10-28 17:42:42', '2025-10-28 17:42:42'),
+(4, 4, 2, '2025-10-29', '20:00:00', '23:00:00', 66.00, 'pix', 'confirmada', '2025-10-28 17:43:12', '2025-10-28 17:43:12'),
+(5, 4, 1, '2025-11-01', '12:00:00', '14:00:00', 500.00, 'cartao', 'confirmada', '2025-10-31 16:40:53', '2025-10-31 16:40:53');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `usuarios`
 --
 
@@ -114,7 +145,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `cpf`, `telefone`, `endereco`, `foto`, `senha`, `criado_em`) VALUES
-(4, 'Gabriel', 'teste@gmail.com', '48109301819', '997671792', 'Rua Atalibio Pire 202', 'http://localhost:3000/uploads/usuario_4.png', '$2b$10$KxZZ.O3pfOrezRCfMfWzLuDmVNVF0Ffs.hIb0abClGCspuk.h7I.K', '2025-10-21 15:52:32');
+(4, 'admin', 'admin@gmail.com', '246.749.163-30', '999999999', 'Rua 01', 'http://localhost:3000/uploads/usuario_4.png', '$2b$10$KxZZ.O3pfOrezRCfMfWzLuDmVNVF0Ffs.hIb0abClGCspuk.h7I.K', '2025-10-21 15:52:32');
 
 --
 -- Índices para tabelas despejadas
@@ -140,6 +171,14 @@ ALTER TABLE `cartoes`
 --
 ALTER TABLE `espacos`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Índices de tabela `reservas`
+--
+ALTER TABLE `reservas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `usuario_id` (`usuario_id`),
+  ADD KEY `espaco_id` (`espaco_id`);
 
 --
 -- Índices de tabela `usuarios`
@@ -170,6 +209,12 @@ ALTER TABLE `espacos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT de tabela `reservas`
+--
+ALTER TABLE `reservas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- Restrições para tabelas despejadas
 --
 
@@ -185,6 +230,13 @@ ALTER TABLE `avaliacoes`
 --
 ALTER TABLE `cartoes`
   ADD CONSTRAINT `cartoes_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Restrições para tabelas `reservas`
+--
+ALTER TABLE `reservas`
+  ADD CONSTRAINT `fk_reserva_espaco` FOREIGN KEY (`espaco_id`) REFERENCES `espacos` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_reserva_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

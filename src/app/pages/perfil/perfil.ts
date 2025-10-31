@@ -102,7 +102,10 @@ export class Perfil implements OnInit {
   }
 
   salvarCampo(campo: 'nome' | 'email' | 'telefone' | 'endereco', valor: string) {
-    if (!valor || valor.trim() === '') return;
+    if (!valor || valor.trim() === '') {
+      alert(`O campo ${campo} não pode ficar vazio.`);
+      return;
+    }
 
     const dados: any = {};
     dados[campo] = valor.trim();
@@ -135,27 +138,40 @@ export class Perfil implements OnInit {
 
   // Atualiza foto do usuário
   onFotoSelecionada(event: any) {
-    const arquivo: File = event.target.files[0];
-    if (!arquivo) return;
+  const arquivo: File = event.target.files[0];
+  if (!arquivo) return;
 
-    this.perfilService.atualizarFoto(this.usuarioId, arquivo).subscribe({
-      next: () => {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.fotoPerfil = e.target.result;
-          const usuario = localStorage.getItem('usuarioLogado');
-          if (usuario) {
-            const usuarioData = JSON.parse(usuario);
-            usuarioData.foto = this.fotoPerfil;
-            localStorage.setItem('usuarioLogado', JSON.stringify(usuarioData));
-            window.dispatchEvent(new Event('storage'));
-          }
-        };
-        reader.readAsDataURL(arquivo);
-      },
-      error: err => alert(`Erro ao atualizar foto: ${err.error?.message || err.message}`)
-    });
+  // Validar extensão
+  const tiposValidos = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (!tiposValidos.includes(arquivo.type)) {
+    alert('Formato de imagem inválido! Use JPEG, JPG ou PNG.');
+    event.target.value = ''; // limpa o input
+    return;
   }
+
+  this.perfilService.atualizarFoto(this.usuarioId, arquivo).subscribe({
+    next: () => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.fotoPerfil = e.target.result;
+
+        // Atualiza localStorage
+        const usuario = localStorage.getItem('usuarioLogado');
+        if (usuario) {
+          const usuarioData = JSON.parse(usuario);
+          usuarioData.foto = this.fotoPerfil;
+          localStorage.setItem('usuarioLogado', JSON.stringify(usuarioData));
+        }
+
+        // Recarrega a página para refletir a mudança
+        window.location.reload();
+      };
+      reader.readAsDataURL(arquivo);
+    },
+    error: err => alert(`Erro ao atualizar foto: ${err.error?.message || err.message}`)
+  });
+}
+
 
   alterarSenha() {
     this.mostrarModalSenha = true;

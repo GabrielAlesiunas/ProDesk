@@ -1,24 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-
-export interface Avaliacao {
-  usuario_id: number;
-  espaco_id: number;
-  nota: number;
-  comentario: string;
-}
-
-export interface ReservaHistorico {
-  espaco_id: number;
-  nome_espaco: string;
-  local: string;
-  data: string;
-  horario: string;
-  preco: number;
-}
+import { ReservaService, Reserva as ReservaModel, Avaliacao } from '../../services/reserva'; // usa o tipo do serviço
 
 @Component({
   selector: 'app-reserva',
@@ -32,63 +17,71 @@ export class Reserva implements OnInit {
   usuarioFoto: string = '';
   usuarioId: number = 0;
 
-  historicoReservas: ReservaHistorico[] = [];
+  reservasAtivas: ReservaModel[] = [];
+  historicoReservas: ReservaModel[] = [];
+
   avaliando: boolean[] = [];
   avaliado: boolean[] = [];
   nota: number[] = [];
   comentario: string[] = [];
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private reservaService: ReservaService) { }
 
   ngOnInit(): void {
-    // Recupera usuário logado
     const usuario = localStorage.getItem('usuarioLogado');
     if (usuario) {
       const dados = JSON.parse(usuario);
       this.usuarioNome = dados.nome;
       this.usuarioFoto = dados.foto;
-      this.usuarioId = dados.id; // ID do usuário
+      this.usuarioId = dados.id;
     }
 
-    // Exemplo de histórico de reservas (pode substituir com API)
-    this.historicoReservas = [
-      { espaco_id: 1, nome_espaco: 'Estúdio de Música', local: 'Sala 1', data: '10/10/2025', horario: '16:00 - 18:00', preco: 80 },
-      { espaco_id: 2, nome_espaco: 'Auditório', local: 'Sala 3', data: '05/10/2025', horario: '09:00 - 12:00', preco: 150 }
-    ];
-
-    // Inicializa arrays de estado
-    this.historicoReservas.forEach((_, index) => {
-      this.avaliando[index] = false;
-      this.avaliado[index] = false;
-      this.nota[index] = 0;
-      this.comentario[index] = '';
-    });
+    if (this.usuarioId) {
+      this.carregarReservas();
+    }
   }
 
-  // Logout
+  carregarReservas() {
+    this.reservaService.listarReservasUsuario(this.usuarioId).subscribe({
+      next: (reservas) => {
+        // separa reservas ativas (confirmadas) e finalizadas
+        this.reservasAtivas = reservas.filter(r => r.status === 'confirmada');
+        this.historicoReservas = reservas.filter(r => r.status === 'finalizada');
+
+        // inicializa arrays para avaliação
+        this.historicoReservas.forEach((_, index) => {
+          this.avaliando[index] = false;
+          this.avaliado[index] = false;
+          this.nota[index] = 0;
+          this.comentario[index] = '';
+        });
+        console.log(reservas)
+      },
+      error: (err) => {
+        console.error('Erro ao carregar reservas:', err);
+      }
+    });
+
+  }
   logout(): void {
     localStorage.removeItem('usuarioLogado');
     this.router.navigate(['/login']);
   }
 
-  // Abrir formulário de avaliação
   abrirFormAvaliacao(index: number) {
     this.avaliando[index] = true;
     this.nota[index] = 0;
     this.comentario[index] = '';
   }
 
-  // Fechar formulário
   fecharFormAvaliacao(index: number) {
     this.avaliando[index] = false;
   }
 
-  // Definir nota
   setNota(index: number, valor: number) {
     this.nota[index] = valor;
   }
 
-  // Enviar avaliação para a API
   enviarAvaliacao(index: number) {
     const reserva = this.historicoReservas[index];
     const avaliacao: Avaliacao = {
@@ -98,7 +91,7 @@ export class Reserva implements OnInit {
       comentario: this.comentario[index]
     };
 
-    this.http.post('http://localhost:3000/api/avaliacoes', avaliacao).subscribe({
+    this.reservaService.enviarAvaliacao(avaliacao).subscribe({
       next: () => {
         alert('Avaliação enviada com sucesso!');
         this.avaliando[index] = false;

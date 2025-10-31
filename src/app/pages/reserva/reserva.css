@@ -172,13 +172,13 @@ h2 {
   transform: scale(1.05);
 }
 
-.detalhes-btn {
-  background-color: #3aa2e9;
+.finalizar-btn {
+  background-color: rgb(50, 197, 50);
   color: #fff;
 }
 
-.detalhes-btn:hover {
-  background-color: #1e81c2;
+.finalizar-btn:hover {
+  background-color: rgb(50, 197, 50);
   transform: scale(1.05);
 }
 

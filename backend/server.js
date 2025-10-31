@@ -390,19 +390,43 @@ app.get('/api/reservas/disponibilidade/:espacoId', (req, res) => {
   });
 });
 
-// GET /api/reservas/usuario/:usuarioId - consultar reservas de um usuário
-app.get('/api/reservas/usuario/:usuarioId', (req, res) => {
-  const { usuarioId } = req.params;
-  const query = `
-    SELECT r.*, e.nome AS espaco_nome, e.imagem AS espaco_imagem
+// Buscar reservas de um usuário (com dados do espaço)
+app.get('/api/reservas/usuario/:id', (req, res) => {
+  const usuarioId = req.params.id;
+  const sql = `
+    SELECT 
+      e.nome
+      r.id,
+      r.usuario_id,
+      r.espaco_id,
+      r.data_reserva,
+      r.hora_inicio,
+      r.hora_fim,
+      r.preco,
+      r.status,
     FROM reservas r
     JOIN espacos e ON r.espaco_id = e.id
     WHERE r.usuario_id = ?
-    ORDER BY r.data_reserva DESC, r.hora_inicio DESC
+    ORDER BY r.data_reserva DESC
   `;
-  db.query(query, [usuarioId], (err, results) => {
-    if (err) return res.status(500).json({ error: 'Erro ao buscar reservas.' });
+  db.query(sql, [usuarioId], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
     res.json(results);
+  });
+});
+
+
+app.put('/api/reservas/:id/status', (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const query = 'UPDATE reservas SET status = ?, atualizado_em = NOW() WHERE id = ?';
+
+  connection.query(query, [status, id], (err, result) => {
+    if (err) {
+      console.error('Erro ao atualizar status da reserva:', err);
+      return res.status(500).json({ error: 'Erro ao atualizar status' });
+    }
+    res.json({ message: 'Status atualizado com sucesso' });
   });
 });
 

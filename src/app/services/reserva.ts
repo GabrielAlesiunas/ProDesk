@@ -2,6 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface Reserva {
+  id: number;
+  usuario_id: number;
+  espaco_id: number;
+  nome: string;
+  data_reserva: string;
+  hora_inicio: string;
+  hora_fim: string;
+  preco: number;
+  status: 'confirmada' | 'finalizada';
+}
+
+export interface Avaliacao {
+  usuario_id: number;
+  espaco_id: number;
+  nota: number;
+  comentario: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ReservaService {
   private apiUrl = 'http://localhost:3000/api';
@@ -14,5 +33,18 @@ export class ReservaService {
 
   criarReserva(reserva: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/reservas`, reserva);
+  }
+
+  listarReservasUsuario(usuarioId: number): Observable<Reserva[]> {
+    return this.http.get<Reserva[]>(`${this.apiUrl}/reservas/usuario/${usuarioId}`);
+  }
+
+  atualizarStatusReserva(id: number, novoStatus: string) {
+    return this.http.put(`${this.apiUrl}/reservas/${id}/status`, { status: novoStatus });
+  }
+
+  // NOVO: enviar avaliação
+  enviarAvaliacao(avaliacao: Avaliacao): Observable<any> {
+    return this.http.post(`${this.apiUrl}/avaliacoes`, avaliacao);
   }
 }

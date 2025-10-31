@@ -37,36 +37,40 @@
 
     <!-- ====== MAIN ====== -->
     <main>
-      <!-- Espaços alugados atualmente -->
-      <section class="reservas-ativas">
+      <!-- Reservas ativas -->
+      <section class="reservas-ativas" *ngIf="reservasAtivas.length > 0; else semAtivas">
         <h2>Meus Espaços Ativos</h2>
-        <div class="reserva-card ativo">
+        <div class="reserva-card ativo" *ngFor="let reserva of reservasAtivas">
           <div class="reserva-info">
-            <h3>Espaço Criativo</h3>
+            <h3>{{ reserva.nome }}</h3>
             <span class="reserva-status">Ativa</span>
-            <p>Local: Sala 2</p>
-            <p>Data: 22/10/2025</p>
-            <p>Horário: 14:00 - 16:00</p>
-            <p>Preço: R$ 120,00</p>
+            <p>Data: {{ reserva.data_reserva | date:'dd/MM/yyyy' }}</p>
+            <p>Horário: {{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</p>
+            <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
           </div>
           <div class="reserva-actions">
-            <button class="detalhes-btn">Detalhes</button>
+            <button class="finalizar-btn">Finalizar</button>
             <button class="cancelar-btn">Cancelar</button>
           </div>
         </div>
       </section>
 
-      <!-- Histórico de reservas -->
-      <section class="historico-reservas">
-        <h2>Histórico de Reservas</h2>
+      <ng-template #semAtivas>
+        <section class="reservas-ativas">
+          <h2>Meus Espaços Ativos</h2>
+          <p>Você não possui reservas ativas no momento.</p>
+        </section>
+      </ng-template>
 
+      <!-- Histórico -->
+      <section class="historico-reservas" *ngIf="historicoReservas.length > 0; else semHistorico">
+        <h2>Histórico de Reservas</h2>
         <div class="historico-card" *ngFor="let reserva of historicoReservas; let i = index">
           <div class="reserva-info">
-            <h3>{{ reserva.nome_espaco }}</h3>
+            <h3>{{ reserva.nome }}</h3>
             <span class="reserva-status finalizada">Finalizada</span>
-            <p>Local: {{ reserva.local }}</p>
-            <p>Data: {{ reserva.data }}</p>
-            <p>Horário: {{ reserva.horario }}</p>
+            <p>Data: {{ reserva.data_reserva | date:'dd/MM/yyyy' }}</p>
+            <p>Horário: {{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</p>
             <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
           </div>
 
@@ -75,14 +79,11 @@
             <button *ngIf="!avaliado[i]" class="avaliar-btn" (click)="abrirFormAvaliacao(i)">Avaliar</button>
           </div>
 
-          <!-- Formulário de avaliação -->
           <div class="form-avaliacao" *ngIf="avaliando[i]">
             <label>Nota:</label>
             <div class="estrelas">
-              <i *ngFor="let s of [1,2,3,4,5]" 
-                 class="fa-star" 
-                 [ngClass]="nota[i] >= s ? 'fas' : 'far'" 
-                 (click)="setNota(i, s)"></i>
+              <i *ngFor="let s of [1,2,3,4,5]" class="fa-star" [ngClass]="nota[i] >= s ? 'fas' : 'far'"
+                (click)="setNota(i, s)"></i>
             </div>
 
             <label>Comentário:</label>
@@ -93,6 +94,13 @@
           </div>
         </div>
       </section>
+
+      <ng-template #semHistorico>
+        <section class="historico-reservas">
+          <h2>Histórico de Reservas</h2>
+          <p>Você ainda não possui reservas finalizadas.</p>
+        </section>
+      </ng-template>
     </main>
   </div>
 </body>
