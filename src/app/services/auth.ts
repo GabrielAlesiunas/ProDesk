@@ -40,4 +40,8 @@ export class Auth {
   estaLogado(): boolean {
     return !!localStorage.getItem('usuarioLogado');
   }
+
+  redefinirSenha(email: string, novaSenha: string) {
+  return this.http.put(`${this.apiUrl}/usuarios/redefinir-senha`, { email, novaSenha });
+  }
 }

@@ -19,13 +19,14 @@ export class Locatorio implements OnInit {
   espacoSelecionado: any = null;
   imagemIndex = 0;
 
-  modalReservaAberto = false; // controla modal de reserva
+  modalReservaAberto = false;
   espacoParaReserva: any = null;
 
   // Campos de filtro
   termoBusca: string = '';
   filtroAvaliacao: string = '';
   filtroPreco: string = '';
+  filtroCompartilhavel: boolean = false; // Novo filtro
 
   // Usuário logado
   usuarioNome: string = '';
@@ -39,7 +40,6 @@ export class Locatorio implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Recupera usuário logado
     const usuario = this.auth.getUsuarioLogado();
     if (usuario) {
       this.usuarioNome = usuario.nome;
@@ -47,7 +47,6 @@ export class Locatorio implements OnInit {
       this.usuarioId = usuario.id;
     }
 
-    // Atualiza se storage mudar
     window.addEventListener('storage', () => {
       const usuario = this.auth.getUsuarioLogado();
       if (usuario) {
@@ -72,7 +71,10 @@ export class Locatorio implements OnInit {
             nome: e.dono_nome,
             foto: e.dono_foto
           },
-          avaliacao: e.avaliacao_media
+          avaliacao: e.avaliacao_media,
+          compartilhavel: !!e.compartilhavel,   // Adiciona campo boolean
+          capacidadeMax: e.capacidade_max || 0, // Para modal
+          pessoasAtuais: e.pessoas_atuais || 0  // Para modal
         }));
         this.espacosFiltrados = [...this.espacos];
       },
@@ -80,13 +82,11 @@ export class Locatorio implements OnInit {
     });
   }
 
-  // Logout
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
 
-  // Filtrar espaços
   filtrarEspacos() {
     let resultado = [...this.espacos];
 
@@ -111,44 +111,43 @@ export class Locatorio implements OnInit {
       );
     }
 
+    if (this.filtroCompartilhavel) {
+      resultado = resultado.filter(e => e.compartilhavel);
+    }
+
     this.espacosFiltrados = resultado;
   }
 
-  // Abrir detalhes do espaço
   abrirDetalhes(espaco: any) {
-  this.espacoSelecionado = { ...espaco };
-  this.imagemIndex = 0;
+    this.espacoSelecionado = { ...espaco };
+    this.imagemIndex = 0;
 
-  // Buscar opiniões
-  this.espacosService.getAvaliacoes(espaco.id).subscribe({
-    next: (avaliacoes) => {
-      this.espacoSelecionado.opinioes = avaliacoes.map(a => ({
-        usuario: a.usuario_nome,
-        foto: a.usuario_foto || 'https://via.placeholder.com/40',
-        texto: a.comentario,       // aqui é o comentário salvo no banco
-        nota: a.nota               // adiciona a nota
-      }));
-    },
-    error: (err) => console.error('Erro ao buscar avaliações:', err)
-  });
-}
+    this.espacosService.getAvaliacoes(espaco.id).subscribe({
+      next: (avaliacoes) => {
+        this.espacoSelecionado.opinioes = avaliacoes.map(a => ({
+          usuario: a.usuario_nome,
+          foto: a.usuario_foto || 'https://via.placeholder.com/40',
+          texto: a.comentario,
+          nota: a.nota
+        }));
+      },
+      error: (err) => console.error('Erro ao buscar avaliações:', err)
+    });
+  }
 
   fecharModal() {
     this.espacoSelecionado = null;
   }
 
-  // Carrossel
   proximaImagem() {
     if (this.espacoSelecionado?.imagens?.length) {
-      this.imagemIndex =
-        (this.imagemIndex + 1) % this.espacoSelecionado.imagens.length;
+      this.imagemIndex = (this.imagemIndex + 1) % this.espacoSelecionado.imagens.length;
     }
   }
 
   anteriorImagem() {
     if (this.espacoSelecionado?.imagens?.length) {
-      this.imagemIndex =
-        (this.imagemIndex - 1 + this.espacoSelecionado.imagens.length) %
+      this.imagemIndex = (this.imagemIndex - 1 + this.espacoSelecionado.imagens.length) %
         this.espacoSelecionado.imagens.length;
     }
   }
@@ -158,9 +157,6 @@ export class Locatorio implements OnInit {
     else alert('Dono desconhecido');
   }
 
-  // ====================
-  // Modal de reserva
-  // ====================
   abrirReserva(espaco: any) {
     this.espacoParaReserva = espaco;
     this.modalReservaAberto = true;

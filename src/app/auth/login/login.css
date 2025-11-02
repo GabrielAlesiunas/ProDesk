@@ -10,7 +10,18 @@
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  background: linear-gradient(135deg, rgb(58, 162, 233), rgb(58, 162, 233));
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.auth-logo .logo {
+  width: 100px;      /* ajuste conforme necessário */
+  height: auto;
+  margin-bottom: 15px;
 }
 
 /* ======= Card ======= */
@@ -58,7 +69,7 @@
 
 .input-group input:focus,
 .input-group select:focus {
-  border-color: #1976d2;
+  border-color: rgb(58, 162, 233);
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
   outline: none;
 }
@@ -70,7 +81,7 @@ button {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background-color: #1976d2;
+  background-color: rgb(58, 162, 233);
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -78,24 +89,28 @@ button {
   transition: background-color 0.3s ease, transform 0.2s;
 }
 
-button:hover {
-  background-color: #125ca1;
-  transform: translateY(-2px);
+/* ======= Botão "Esqueci minha senha" ======= */
+.forgot-btn {
+  margin-top: 10px;
+  background: transparent;
+  color: #1976d2;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9rem;
 }
 
 /* ======= Links ======= */
 .link {
+  font-weight: bold;
   display: block;
   text-align: center;
   margin-top: 15px;
-  color: #1976d2;
+  color: rgb(58, 162, 233);
+  cursor: pointer;
   font-size: 0.9rem;
-  text-decoration: none;
-}
-
-.link:hover {
   text-decoration: underline;
 }
+
 
 /* ======= Erros ======= */
 .input-group input.invalid,
@@ -116,6 +131,61 @@ button:hover {
   margin-right: 6px;
 }
 
+/* ======= Modal de redefinição de senha ======= */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px 20px;
+  width: 320px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal h3 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.modal .input-group {
+  margin-bottom: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.modal-actions button {
+  width: 48%;
+}
+
+.modal-actions-ok {
+  display: flex;
+  justify-content: center; /* centraliza o conteúdo horizontalmente */
+  margin-top: 15px;        /* dá um espaço acima do botão */
+}
+
+.modal-actions-ok button.ok {
+  width: 80px;             /* largura fixa */
+}
+
+button.cancelar {
+  background-color: #ccc;
+}
+
 /* ======= Responsividade ======= */
 @media (max-width: 600px) {
   .login-card {
@@ -130,6 +200,10 @@ button:hover {
   select,
   button {
     font-size: 0.95rem;
+  }
+
+  .modal {
+    width: 90%;
   }
 }
 

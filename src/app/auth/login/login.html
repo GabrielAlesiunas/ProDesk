@@ -1,13 +1,11 @@
 <div class="login-container">
   <div class="login-card">
     <div class="auth-logo">
-      <h2>Entrar</h2>
-    </div>
+  <img src="assets/logo.jpg" alt="Logo da empresa" class="logo" />
+  <h2>Entrar</h2>
+</div>
 
-    <!-- Formulário -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
-      <!-- Mensagem de erro geral do backend -->
       <div class="error" *ngIf="errorMessage">
         <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
       </div>
@@ -15,50 +13,61 @@
       <!-- Email -->
       <div class="input-group">
         <label>Email</label>
-        <i class="fas fa-envelope"></i>
-        <input type="email"
-               formControlName="email"
-               placeholder=" "
-               [class.invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" />
-        
-        <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')">
-          <i class="fas fa-exclamation-circle"></i> Email é obrigatório.
-        </div>
-        <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('email')">
-          <i class="fas fa-exclamation-circle"></i> Email inválido.
-        </div>
-        <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('notFound')">
-          <i class="fas fa-exclamation-circle"></i> Usuário não encontrado.
-        </div>
+        <input type="email" formControlName="email" required />
+        <i class="fas fa-envelope icon"></i>
       </div>
 
       <!-- Senha -->
       <div class="input-group">
         <label>Senha</label>
-        <i class="fas fa-lock"></i>
-        <input [type]="showPassword ? 'text' : 'password'"
-               formControlName="password"
-               placeholder=" "
-               [class.invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" />
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required />
+        <i class="fas fa-lock icon"></i>
         <span class="toggle-pass" (click)="showPassword = !showPassword">
           <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
         </span>
-
-        <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
-          <i class="fas fa-exclamation-circle"></i> Senha é obrigatória.
-        </div>
-        <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('incorrect')">
-          <i class="fas fa-exclamation-circle"></i> Senha incorreta.
-        </div>
       </div>
 
-      <!-- Botão -->
-      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
+      <button type="submit" [disabled]="loginForm.invalid" class="btn-login">Entrar</button>
+
+      <button type="button" class="forgot-btn link" (click)="abrirModalSenha()">Esqueci minha senha</button>
     </form>
 
-    <!-- Rodapé -->
     <div class="auth-footer">
       <a routerLink="/register" class="link">Não tem uma conta? Cadastrar</a>
+    </div>
+  </div>
+</div>
+
+<!-- 🔒 Modal de redefinição de senha -->
+<div class="modal-overlay" *ngIf="modalAberto">
+  <div class="modal">
+    <h3>Redefinir Senha</h3>
+    <form (ngSubmit)="redefinirSenha()">
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="emailRecuperacao" name="emailRecuperacao" required />
+      </div>
+
+      <div class="input-group">
+        <label>Nova senha</label>
+        <input type="password" [(ngModel)]="novaSenha" name="novaSenha" required />
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-modal">Salvar</button>
+        <button type="button" (click)="fecharModalSenha()" class="btn-cancel">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ✅ Modal de feedback -->
+<div class="modal-overlay" *ngIf="modalFeedbackAberto">
+  <div class="modal">
+    <h3>{{ feedbackTitulo }}</h3>
+    <p>{{ feedbackMensagem }}</p>
+    <div class="modal-actions-ok">
+      <button type="button" class="btn-ok" (click)="fecharModalFeedback()">OK</button>
     </div>
   </div>
 </div>

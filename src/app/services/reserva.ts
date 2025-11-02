@@ -43,8 +43,12 @@ export class ReservaService {
     return this.http.put(`${this.apiUrl}/reservas/${id}/status`, { status: novoStatus });
   }
 
-  // NOVO: enviar avaliação
   enviarAvaliacao(avaliacao: Avaliacao): Observable<any> {
     return this.http.post(`${this.apiUrl}/avaliacoes`, avaliacao);
+  }
+
+  // NOVO: retorna a quantidade de reservas ativas para um espaço em um horário específico
+  getOcupacao(espacoId: number, data: string, horaInicio: string, horaFim: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/reservas/ocupacao/${espacoId}?data=${data}&hora_inicio=${horaInicio}&hora_fim=${horaFim}`);
   }
 }

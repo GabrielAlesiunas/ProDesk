@@ -255,9 +255,9 @@ app.get('/api/avaliacoes/:espacoId', (req, res) => {
   });
 });
 
-// POST /api/espacos - cadastrar novo espaço com múltiplas imagens
+// POST /api/espacos - cadastrar novo espaço com múltiplas imagens e opção de compartilhamento
 app.post('/api/espacos', uploadEspaco.array('imagens', 10), (req, res) => {
-  let { nome, descricao, precoHora, dono_id, comodidades } = req.body;
+  let { nome, descricao, precoHora, dono_id, comodidades, compartilhavel, capacidade_max } = req.body;
 
   if (!nome || !precoHora || !dono_id)
     return res.status(400).json({ error: 'Nome, preço e dono são obrigatórios.' });
@@ -266,19 +266,25 @@ app.post('/api/espacos', uploadEspaco.array('imagens', 10), (req, res) => {
   if (isNaN(precoHoraNum))
     return res.status(400).json({ error: 'Preço inválido' });
 
+  // Processar comodidades
   try {
     comodidades = comodidades ? JSON.parse(comodidades) : [];
   } catch (err) {
     return res.status(400).json({ error: 'Erro ao processar comodidades' });
   }
 
+  // Processar imagens
   const imagensPaths = req.files ? req.files.map(file => 'http://localhost:3000/' + file.path.replace(/\\/g, '/')) : [];
   const imagemPrincipal = imagensPaths[0] || '';
 
+  // Ajustar compartilhável e capacidade
+  const isCompartilhavel = compartilhavel === 'true' || compartilhavel === true;
+  const capacidadeMax = isCompartilhavel ? Number(capacidade_max) || 1 : 1;
+
   const query = `
     INSERT INTO espacos
-      (nome, descricao, precoHora, dono_id, imagem, comodidades, imagens)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+      (nome, descricao, precoHora, dono_id, imagem, comodidades, imagens, compartilhavel, capacidade_max, ocupacao_atual)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
   `;
 
   db.query(query, [
@@ -288,7 +294,9 @@ app.post('/api/espacos', uploadEspaco.array('imagens', 10), (req, res) => {
     dono_id,
     imagemPrincipal,
     JSON.stringify(comodidades),
-    JSON.stringify(imagensPaths)
+    JSON.stringify(imagensPaths),
+    isCompartilhavel ? 1 : 0,
+    capacidadeMax
   ], (err, result) => {
     if (err) return res.status(500).json({ error: 'Erro ao cadastrar espaço', details: err });
     res.status(201).json({ message: 'Espaço cadastrado com sucesso!', id: result.insertId });
@@ -321,28 +329,51 @@ app.post('/api/reservas', (req, res) => {
     return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
   }
 
-  // Verifica disponibilidade
-  const disponivelQuery = `
-    SELECT * FROM reservas
-    WHERE espaco_id = ? AND data_reserva = ? 
-      AND (
-        (hora_inicio <= ? AND hora_fim > ?) OR
-        (hora_inicio < ? AND hora_fim >= ?)
-      ) AND status = 'confirmada'
-  `;
-  db.query(disponivelQuery, [espaco_id, data_reserva, hora_inicio, hora_inicio, hora_fim, hora_fim], (err, results) => {
-    if (err) return res.status(500).json({ error: 'Erro ao verificar disponibilidade.' });
-    if (results.length > 0) return res.status(400).json({ error: 'Espaço indisponível nesse horário.' });
+  // 1️⃣ Busca se o espaço é compartilhável e qual é sua capacidade
+  const espacoQuery = 'SELECT compartilhavel, capacidade_max FROM espacos WHERE id = ?';
+  db.query(espacoQuery, [espaco_id], (err, resultsEspaco) => {
+    if (err) return res.status(500).json({ error: 'Erro ao verificar espaço.' });
+    if (resultsEspaco.length === 0) return res.status(404).json({ error: 'Espaço não encontrado.' });
 
-    // Inserir reserva
-    const insertQuery = `
-      INSERT INTO reservas
-        (usuario_id, espaco_id, data_reserva, hora_inicio, hora_fim, preco, forma_pagamento, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmada')
+    const espaco = resultsEspaco[0];
+    const compartilhavel = !!espaco.compartilhavel;
+    const capacidadeMax = espaco.capacidade_max || 1;
+
+    // 2️⃣ Conta quantas reservas confirmadas já existem nesse horário
+    const ocupacaoQuery = `
+      SELECT COUNT(*) AS ocupacao
+      FROM reservas
+      WHERE espaco_id = ? AND data_reserva = ?
+        AND NOT (hora_fim <= ? OR hora_inicio >= ?)
+        AND status = 'confirmada'
     `;
-    db.query(insertQuery, [usuario_id, espaco_id, data_reserva, hora_inicio, hora_fim, preco, forma_pagamento], (err, result) => {
-      if (err) return res.status(500).json({ error: 'Erro ao criar reserva.' });
-      res.status(201).json({ message: 'Reserva criada com sucesso!', id: result.insertId });
+    db.query(ocupacaoQuery, [espaco_id, data_reserva, hora_inicio, hora_fim], (err, resultsOcup) => {
+      if (err) return res.status(500).json({ error: 'Erro ao verificar ocupação.' });
+
+      const ocupacaoAtual = resultsOcup[0].ocupacao;
+
+      // 3️⃣ Validação de disponibilidade
+      if (!compartilhavel && ocupacaoAtual > 0) {
+        return res.status(400).json({ error: 'Espaço não compartilhável já reservado nesse horário.' });
+      }
+
+      if (compartilhavel && ocupacaoAtual >= capacidadeMax) {
+        return res.status(400).json({ error: 'Capacidade máxima atingida para este horário.' });
+      }
+
+      // 4️⃣ Tudo certo: insere a reserva
+      const insertQuery = `
+        INSERT INTO reservas
+          (usuario_id, espaco_id, data_reserva, hora_inicio, hora_fim, preco, forma_pagamento, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmada')
+      `;
+      db.query(insertQuery, [usuario_id, espaco_id, data_reserva, hora_inicio, hora_fim, preco, forma_pagamento], (err, result) => {
+        if (err) {
+          console.error('❌ Erro ao criar reserva:', err);
+          return res.status(500).json({ error: 'Erro ao criar reserva.' });
+        }
+        res.status(201).json({ message: 'Reserva criada com sucesso!', id: result.insertId });
+      });
     });
   });
 });
@@ -363,9 +394,9 @@ app.get('/api/reservas/usuario/:usuarioId', (req, res) => {
   });
 });
 
-// GET /api/reservas/disponibilidade/:espacoId?data=YYYY-MM-DD&hora=HH:MM
-app.get('/api/reservas/disponibilidade/:espacoId', (req, res) => {
-  const { espacoId } = req.params;
+// GET /api/espacos/:id/ocupacao?data=YYYY-MM-DD&hora_inicio=HH:MM&hora_fim=HH:MM
+app.get('/api/espacos/:id/ocupacao', (req, res) => {
+  const { id } = req.params;
   const { data, hora_inicio, hora_fim } = req.query;
 
   if (!data || !hora_inicio || !hora_fim) {
@@ -373,16 +404,41 @@ app.get('/api/reservas/disponibilidade/:espacoId', (req, res) => {
   }
 
   const query = `
-    SELECT * FROM reservas
+    SELECT COUNT(*) AS ocupacao
+    FROM reservas
     WHERE espaco_id = ?
       AND data_reserva = ?
       AND NOT (hora_fim <= ? OR hora_inicio >= ?)
       AND status = 'confirmada'
   `;
 
-  db.query(query, [espacoId, data, hora_inicio, hora_fim], (err, results) => {
-    if (err) return res.status(500).json({ error: 'Erro ao verificar disponibilidade' });
-    res.json({ disponivel: results.length === 0 });
+  db.query(query, [id, data, hora_inicio, hora_fim], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ ocupacao: results[0].ocupacao });
+  });
+});
+
+// GET /api/reservas/ocupacao/:espacoId?data=YYYY-MM-DD&hora_inicio=HH:MM&hora_fim=HH:MM
+app.get('/api/reservas/ocupacao/:espacoId', (req, res) => {
+  const { espacoId } = req.params;
+  const { data, hora_inicio, hora_fim } = req.query;
+
+  if (!data || !hora_inicio || !hora_fim) {
+    return res.status(400).json({ error: 'Data, hora_inicio e hora_fim são obrigatórios.' });
+  }
+
+  const sql = `
+    SELECT COUNT(*) AS ocupacao
+    FROM reservas
+    WHERE espaco_id = ?
+      AND data_reserva = ?
+      AND NOT (hora_fim <= ? OR hora_inicio >= ?)
+      AND status = 'confirmada'
+  `;
+
+  db.query(sql, [espacoId, data, hora_inicio, hora_fim, hora_inicio, hora_fim], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erro ao buscar ocupação.' });
+    res.json({ ocupacao: results[0].ocupacao });
   });
 });
 
@@ -435,6 +491,18 @@ app.put('/api/reservas/:id/status', (req, res) => {
 
     console.log(`✅ Reserva ${id} atualizada para status: ${status}`);
     res.json({ message: 'Status atualizado com sucesso!' });
+  });
+});
+
+app.put('/api/usuarios/redefinir-senha', (req, res) => {
+  const { email, novaSenha } = req.body;
+  if (!email || !novaSenha) return res.status(400).json({ error: 'Dados incompletos.' });
+
+  const sql = 'UPDATE usuarios SET senha = ? WHERE email = ?';
+  db.query(sql, [novaSenhaHash, email], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Erro no servidor.' });
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Usuário não encontrado.' });
+    res.json({ message: 'Senha atualizada com sucesso.' });
   });
 });
 

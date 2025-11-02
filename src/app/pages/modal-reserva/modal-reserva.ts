@@ -71,17 +71,10 @@ export class ReservaModal implements OnInit {
     this.cartaoSelecionado = null;
   }
 
-  verificarDisponibilidade() {
-    if (!this.espaco || !this.data || !this.horaInicio || !this.horaFim) {
-      this.disponivel = null;
-      return;
-    }
-    this.carregando = true;
-    this.reservaService.verificarDisponibilidade(this.espaco.id, this.data, this.horaInicio, this.horaFim)
-      .subscribe({
-        next: (res) => { this.disponivel = res.disponivel; this.carregando = false; },
-        error: (err) => { console.error('Erro ao verificar disponibilidade:', err); this.disponivel = false; this.carregando = false; }
-      });
+  atualizarDisponibilidade() {
+    this.calcularPreco();
+    this.verificarDisponibilidade();
+    if (this.espaco.compartilhavel) this.atualizarOcupacao();
   }
 
   calcularPreco() {
@@ -93,6 +86,47 @@ export class ReservaModal implements OnInit {
     this.precoTotal = duracao * this.espaco.precoHora;
   }
 
+verificarDisponibilidade() {
+  if (!this.espaco || !this.data || !this.horaInicio || !this.horaFim) {
+    this.disponivel = null;
+    return;
+  }
+
+  this.carregando = true;
+
+  // Para todos os espaços, verificamos a ocupação
+  this.reservaService.getOcupacao(this.espaco.id, this.data, this.horaInicio, this.horaFim)
+    .subscribe({
+      next: (res) => {
+        const ocupacaoAtual = res.ocupacao || 0;
+
+        if (this.espaco.compartilhavel && this.espaco.capacidade_max) {
+          // Espaços compartilháveis: comparar com capacidade_max
+          this.disponivel = ocupacaoAtual < this.espaco.capacidade_max;
+        } else {
+          // Espaços não compartilháveis: disponível se ninguém reservou
+          this.disponivel = ocupacaoAtual === 0;
+        }
+
+        this.carregando = false;
+      },
+      error: (err) => {
+        console.error('Erro ao verificar disponibilidade:', err);
+        this.disponivel = false;
+        this.carregando = false;
+      }
+    });
+}
+
+  atualizarOcupacao() {
+    if (!this.espaco || !this.data || !this.horaInicio || !this.horaFim) return;
+    this.reservaService.getOcupacao(this.espaco.id, this.data, this.horaInicio, this.horaFim)
+      .subscribe({
+        next: (res) => this.espaco.usuariosAtuais = res.ocupacao,
+        error: () => this.espaco.usuariosAtuais = 0
+      });
+  }
+
   confirmarPagamento() {
     if (this.formaPagamento === 'Cartão' && !this.cartaoSelecionado) {
       alert('Selecione um cartão.');
@@ -101,30 +135,20 @@ export class ReservaModal implements OnInit {
 
     this.pagamentoEmProcesso = true;
 
-    // Timer de 3 segundos para simular processamento
     timer(3000).subscribe(() => {
       this.pagamentoEmProcesso = false;
-
-      const sucessoPagamento = true; // simula sucesso; pode alterar para false para teste de falha
+      const sucessoPagamento = true;
 
       if (sucessoPagamento) {
-        // Cria a reserva no banco
-        this.reservar(() => {
-          // Abre modal de status após criar reserva
-          this.abrirStatusModal(true);
-        });
+        this.reservar(() => { this.abrirStatusModal(true); });
       } else {
-        // Falha no pagamento, apenas abre modal de status
         this.abrirStatusModal(false);
       }
     });
   }
 
   abrirStatusModal(sucesso: boolean) {
-    if (this.statusModalRef) {
-      this.statusModalRef.destroy();
-    }
-
+    if (this.statusModalRef) this.statusModalRef.destroy();
     this.statusModalRef = this.viewContainerRef.createComponent(StatusPagamento);
     this.statusModalRef.instance.sucesso = sucesso;
 
@@ -150,6 +174,8 @@ export class ReservaModal implements OnInit {
       forma_pagamento: this.formaPagamento
     };
 
+    console.log('📦 Enviando reserva para o backend:', reserva);
+    
     this.reservaService.criarReserva(reserva).subscribe({
       next: () => {
         this.reservaFeita.emit();

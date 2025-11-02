@@ -22,19 +22,37 @@
   </header>
 
   <div class="busca-filtros">
-    <input type="text" placeholder="Buscar por título ou dono" [(ngModel)]="termoBusca" (input)="filtrarEspacos()" />
-    <select [(ngModel)]="filtroAvaliacao" (change)="filtrarEspacos()">
-      <option value="">Avaliação mínima</option>
-      <option value="5">⭐ 5+</option>
-      <option value="4">⭐ 4+</option>
-      <option value="3">⭐ 3+</option>
-    </select>
-    <select [(ngModel)]="filtroPreco" (change)="filtrarEspacos()">
-      <option value="">Preço por hora</option>
-      <option value="asc">Menor para maior</option>
-      <option value="desc">Maior para menor</option>
-    </select>
-  </div>
+  <input 
+    type="text" 
+    placeholder="Buscar por título ou dono" 
+    [(ngModel)]="termoBusca" 
+    (input)="filtrarEspacos()" 
+  />
+
+  <select [(ngModel)]="filtroAvaliacao" (change)="filtrarEspacos()">
+    <option value="">Avaliação mínima</option>
+    <option value="5">⭐ 5+</option>
+    <option value="4">⭐ 4+</option>
+    <option value="3">⭐ 3+</option>
+  </select>
+
+  <select [(ngModel)]="filtroPreco" (change)="filtrarEspacos()">
+    <option value="">Preço por hora</option>
+    <option value="asc">Menor para maior</option>
+    <option value="desc">Maior para menor</option>
+  </select>
+
+  <!-- Novo filtro compartilhável -->
+  <label class="filtro-compartilhavel">
+    <input 
+      type="checkbox" 
+      [(ngModel)]="filtroCompartilhavel" 
+      (change)="filtrarEspacos()" 
+    />
+    Apenas espaços compartilháveis
+  </label>
+</div>
+
 
   <h2>Espaços Disponíveis</h2>
 

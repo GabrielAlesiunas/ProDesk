@@ -269,6 +269,47 @@ ul li button:hover {
   white-space: nowrap;
 }
 
+/* ====== Checkbox Compartilhável ====== */
+.cadastro-espaco label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  accent-color: #3aa2e9; /* cor do checkbox no moderno */
+  cursor: pointer;
+}
+
+.cadastro-espaco label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+/* ====== Input de Capacidade Máxima ====== */
+.cadastro-espaco div[ng-reflect-ng-if] {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.cadastro-espaco input#capacidade_max {
+  width: 150px; /* tamanho menor, adequado para números */
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.cadastro-espaco input#capacidade_max:focus {
+  outline: none;
+  border-color: #3aa2e9;
+  box-shadow: 0 0 5px rgba(58,162,233,0.5);
+}
+
+
 /* ====== Responsividade ====== */
 @media (max-width: 768px) {
   .page-container {

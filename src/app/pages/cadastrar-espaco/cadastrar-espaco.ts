@@ -24,6 +24,10 @@ export class CadastrarEspaco implements OnInit {
   imagensSelecionadas: File[] = [];
   arquivosSelecionados: string = '';
 
+  compartilhavel: boolean = false;   // Novo campo checkbox
+  capacidade_max: number | null = null; // Número máximo de pessoas
+
+
   // modal
   modalAberto: boolean = false;
   mensagemModal: string = '';
@@ -68,39 +72,46 @@ onFilesSelected(event: any) {
 }
 
   cadastrarEspaco(): void {
-    if (!this.nome || !this.preco) {
-      this.mensagemModal = 'Preencha todos os campos obrigatórios.';
-      this.modalAberto = true;
-      return;
-    }
-
-    const usuario = JSON.parse(localStorage.getItem('usuarioLogado')!);
-
-    const formData = new FormData();
-    formData.append('nome', this.nome);
-    formData.append('descricao', this.descricao);
-    formData.append('precoHora', String(this.preco));
-    formData.append('dono_id', String(usuario.id));
-    formData.append('comodidades', JSON.stringify(this.comodidades));
-
-    // Adiciona todas as imagens
-    this.imagensSelecionadas.forEach(file => {
-      formData.append('imagens', file, file.name);
-    });
-
-    this.espacosService.cadastrarEspaco(formData).subscribe({
-  next: (res: any) => {
-    // Mostra o modal de sucesso
-    this.mensagemModal = 'Espaço cadastrado com sucesso!';
+  if (!this.nome || !this.preco) {
+    this.mensagemModal = 'Preencha todos os campos obrigatórios.';
     this.modalAberto = true;
-    // Não navega ainda, espera o usuário fechar
-  },
-  error: (err) => {
-    console.error(err);
-    this.mensagemModal = 'Erro ao cadastrar espaço: ' + (err.error?.error || 'Verifique os dados');
-    this.modalAberto = true;
+    return;
   }
-});
+
+  if (this.compartilhavel && (!this.capacidade_max || this.capacidade_max < 1)) {
+    this.mensagemModal = 'Informe a capacidade máxima para espaços compartilháveis.';
+    this.modalAberto = true;
+    return;
+  }
+
+  const usuario = JSON.parse(localStorage.getItem('usuarioLogado')!);
+
+  const formData = new FormData();
+  formData.append('nome', this.nome);
+  formData.append('descricao', this.descricao);
+  formData.append('precoHora', String(this.preco));
+  formData.append('dono_id', String(usuario.id));
+  formData.append('comodidades', JSON.stringify(this.comodidades));
+  formData.append('compartilhavel', String(this.compartilhavel));
+  if (this.compartilhavel) {
+    formData.append('capacidade_max', String(this.capacidade_max));
+  }
+
+  this.imagensSelecionadas.forEach(file => {
+    formData.append('imagens', file, file.name);
+  });
+
+  this.espacosService.cadastrarEspaco(formData).subscribe({
+    next: (res: any) => {
+      this.mensagemModal = 'Espaço cadastrado com sucesso!';
+      this.modalAberto = true;
+    },
+    error: (err) => {
+      console.error(err);
+      this.mensagemModal = 'Erro ao cadastrar espaço: ' + (err.error?.error || 'Verifique os dados');
+      this.modalAberto = true;
+    }
+  });
 }
 
   fecharModal() {

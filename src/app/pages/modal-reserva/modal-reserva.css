@@ -9,6 +9,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1001;
+  padding: 20px; /* 🔹 Garante espaço caso o conteúdo cresça */
 }
 
 .modal {
@@ -22,6 +23,26 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  /* 🔹 Scroll e limite de altura */
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #bbb #f0f0f0;
+}
+
+/* 🔹 Scrollbar personalizada (Chrome, Edge, etc.) */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
 }
 
 .modal h2 {
@@ -82,9 +103,14 @@ button:disabled {
   transition: color 0.3s;
 }
 
+.fechar:hover {
+  color: darkred;
+}
+
 .disponibilidade {
   font-weight: 600;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 img {
@@ -97,7 +123,6 @@ p {
   margin: 5px 0;
   text-align: center;
 }
-
 
 .cartao-preview {
   border: 1px solid #ccc;
@@ -127,4 +152,18 @@ p {
 .cartao-preview strong {
   font-weight: 600;
   color: rgb(58,162,233);
+}
+
+.compartilhamento-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.compartilhamento-info i {
+  color: #3aa2e9;
 }
