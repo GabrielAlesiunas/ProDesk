@@ -17,7 +17,7 @@ export class Auth {
       .pipe(
         tap(usuario => {
           // Salva usuário no localStorage
-          usuario.foto = usuario.foto || 'https://images.unsplash.com/photo-1624261227227-2b6c9a2e3f6b';
+          usuario.foto = usuario.foto || 'assets/user.jpg';
           localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
           window.dispatchEvent(new Event('storage')); // para atualizar menus globais
         })
