@@ -370,6 +370,103 @@ body {
   transform: scale(1.05);
 }
 
+/* Container do campo em edição */
+.perfil-info input {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px 12px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  margin-right: 10px;
+}
+
+.perfil-info input:focus {
+  border-color: rgb(58, 162, 233);
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Botões de ação */
+.perfil-info button {
+  padding: 6px 12px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Botão Salvar (verde) */
+.perfil-info button:first-of-type {
+  background-color: #28a745;
+  color: white;
+}
+
+.perfil-info button:first-of-type:hover {
+  background-color: #218838;
+}
+
+/* Botão Cancelar (vermelho) */
+.perfil-info button:last-of-type {
+  background-color: #dc3545;
+  color: white;
+}
+
+.perfil-info button:last-of-type:hover {
+  background-color: #c82333;
+}
+
+.perfil-foto-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Imagem de perfil */
+.perfil-foto {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgb(58, 162, 233);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.perfil-foto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Esconde o input padrão */
+.perfil-foto-card input[type="file"] {
+  display: none;
+}
+
+/* Label customizada como botão */
+.perfil-foto-card label.upload-btn {
+  display: inline-block;
+  background-color: rgb(58, 162, 233);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.perfil-foto-card label.upload-btn:hover {
+  background-color: rgb(58, 162, 233);
+}
+
+
+
 @keyframes fadeIn {
   to { opacity: 1; }
 }

@@ -6,12 +6,12 @@ export interface Reserva {
   id: number;
   usuario_id: number;
   espaco_id: number;
-  nome: string;
+  espaco_nome: string;
   data_reserva: string;
   hora_inicio: string;
   hora_fim: string;
   preco: number;
-  status: 'confirmada' | 'finalizada';
+  status: 'confirmada' | 'finalizada' | 'cancelada';
 }
 
 export interface Avaliacao {

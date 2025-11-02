@@ -42,15 +42,15 @@
         <h2>Meus Espaços Ativos</h2>
         <div class="reserva-card ativo" *ngFor="let reserva of reservasAtivas">
           <div class="reserva-info">
-            <h3>{{ reserva.nome }}</h3>
+            <h3>{{ reserva.espaco_nome }}</h3>
             <span class="reserva-status">Ativa</span>
             <p>Data: {{ reserva.data_reserva | date:'dd/MM/yyyy' }}</p>
             <p>Horário: {{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</p>
             <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
           </div>
           <div class="reserva-actions">
-            <button class="finalizar-btn">Finalizar</button>
-            <button class="cancelar-btn">Cancelar</button>
+            <button class="finalizar-btn" (click)="abrirModal(reserva, 'finalizar')">Finalizar</button>
+            <button class="cancelar-btn" (click)="abrirModal(reserva, 'cancelar')">Cancelar</button>
           </div>
         </div>
       </section>
@@ -67,8 +67,15 @@
         <h2>Histórico de Reservas</h2>
         <div class="historico-card" *ngFor="let reserva of historicoReservas; let i = index">
           <div class="reserva-info">
-            <h3>{{ reserva.nome }}</h3>
-            <span class="reserva-status finalizada">Finalizada</span>
+            <h3>{{ reserva.espaco_nome }}</h3>
+            <!-- Status colorido -->
+            <span class="reserva-status" [ngClass]="{
+        'finalizada': reserva.status === 'finalizada',
+        'cancelada': reserva.status === 'cancelada'
+      }">
+              {{ reserva.status === 'finalizada' ? 'Finalizada' : (reserva.status === 'cancelada' ? 'Cancelada' :
+              reserva.status) }}
+            </span>
             <p>Data: {{ reserva.data_reserva | date:'dd/MM/yyyy' }}</p>
             <p>Horário: {{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</p>
             <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
@@ -76,7 +83,11 @@
 
           <div class="reserva-actions">
             <button class="repetir-btn">Reservar Novamente</button>
-            <button *ngIf="!avaliado[i]" class="avaliar-btn" (click)="abrirFormAvaliacao(i)">Avaliar</button>
+            <!-- Avaliar só aparece se não estiver cancelada -->
+            <button *ngIf="!avaliado[i] && reserva.status !== 'cancelada'" class="avaliar-btn"
+              (click)="abrirFormAvaliacao(i)">
+              Avaliar
+            </button>
           </div>
 
           <div class="form-avaliacao" *ngIf="avaliando[i]">
@@ -98,11 +109,47 @@
       <ng-template #semHistorico>
         <section class="historico-reservas">
           <h2>Histórico de Reservas</h2>
+          <p>Você ainda não possui reservas finalizadas ou canceladas.</p>
+        </section>
+      </ng-template>
+
+      <ng-template #semHistorico>
+        <section class="historico-reservas">
+          <h2>Histórico de Reservas</h2>
           <p>Você ainda não possui reservas finalizadas.</p>
         </section>
       </ng-template>
     </main>
   </div>
 </body>
+
+<!-- Modal de Confirmação -->
+<div class="modal-overlay" *ngIf="modalAberto">
+  <div class="modal-container">
+    <h3>
+      {{ modalAcao === 'finalizar' ? 'Finalizar Reserva' : 'Cancelar Reserva' }}
+    </h3>
+    <p>
+      Tem certeza que deseja
+      <strong>{{ modalAcao === 'finalizar' ? 'finalizar' : 'cancelar' }}</strong>
+      esta reserva?
+    </p>
+
+    <div class="modal-buttons">
+      <button class="confirmar" (click)="confirmarAcao()">Confirmar</button>
+      <button class="cancelar" (click)="fecharModal()">Voltar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal de Sucesso -->
+<div class="modal-overlay" *ngIf="modalSucessoAberto">
+  <div class="modal-container">
+    <h3>{{ mensagemModal }}</h3>
+    <button class="confirmar" (click)="fecharModalSucesso()">OK</button>
+  </div>
+</div>
+
 
 </html>

@@ -27,7 +27,7 @@ body {
   background: rgb(58, 162, 233);
   color: #fff;
   display: flex;
-  justify-content: space-between; /* Espaço entre título/nav e usuário */
+  justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -39,12 +39,11 @@ body {
   font-weight: 600;
 }
 
-/* Nav centralizado */
 .menu nav {
   display: flex;
-  justify-content: center; /* centraliza horizontalmente */
+  justify-content: center;
   gap: 25px;
-  flex: 1; /* ocupa espaço disponível entre h1 e user-area */
+  flex: 1;
   margin: 0 20px;
 }
 
@@ -59,7 +58,6 @@ body {
   color: #d1ecff;
 }
 
-/* Área do usuário */
 .user-area {
   display: flex;
   align-items: center;
@@ -130,7 +128,6 @@ button {
   transition: all 0.3s;
 }
 
-/* Botões específicos */
 button[type="submit"] {
   background-color: #3aa2e9;
   color: #fff;
@@ -138,7 +135,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #3aa2e9;
+  background-color: #1e81c2;
 }
 
 button[type="button"] {
@@ -153,7 +150,6 @@ button[type="button"]:hover {
   background-color: #1e81c2;
 }
 
-/* Lista de comodidades */
 ul {
   list-style: none;
   margin-top: 10px;
@@ -196,6 +192,81 @@ ul li button:hover {
 
 .logout-btn:active {
   transform: scale(0.95);
+}
+
+/* ====== MODAL ====== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-container {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-container h3 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 18px;
+}
+
+.modal-container button.confirmar {
+  padding: 10px 20px;
+  background: #3aa2e9;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.modal-container button.confirmar:hover {
+  background: #1e81c2;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-upload {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background-color: #3aa2e9;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.btn-upload:hover {
+  background-color: #1e81c2;
+}
+
+.file-names {
+  font-size: 14px;
+  color: #333;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ====== Responsividade ====== */

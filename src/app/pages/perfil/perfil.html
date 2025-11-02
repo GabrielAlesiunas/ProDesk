@@ -54,7 +54,11 @@
           <!-- Foto do Perfil -->
           <div class="perfil-foto-card">
             <img class="perfil-foto" [src]="fotoPerfil" alt="Foto do Perfil">
-            <input type="file" (change)="onFotoSelecionada($event)" />
+
+            <label for="fotoInput" class="upload-btn">
+              <i class="fas fa-camera"></i> Selecionar nova foto
+            </label>
+            <input id="fotoInput" type="file" (change)="onFotoSelecionada($event)" />
           </div>
 
           <!-- Nome -->
@@ -117,10 +121,9 @@
         <!-- Segurança -->
         <div *ngIf="activeTab === 'seguranca'" class="card">
           <h3>Configurações de Segurança</h3>
-          <p>Altere sua senha e configure autenticação de dois fatores.</p>
+          <p>Altere sua senha</p>
           <div class="btn-group">
             <button class="btn-action" (click)="alterarSenha()">Alterar Senha</button>
-            <button class="btn-action" (click)="ativar2FA()">Ativar 2FA</button>
           </div>
         </div>
 

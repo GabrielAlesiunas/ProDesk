@@ -116,21 +116,22 @@ export class Locatorio implements OnInit {
 
   // Abrir detalhes do espaço
   abrirDetalhes(espaco: any) {
-    this.espacoSelecionado = { ...espaco };
-    this.imagemIndex = 0;
+  this.espacoSelecionado = { ...espaco };
+  this.imagemIndex = 0;
 
-    // Buscar opiniões
-    this.espacosService.getAvaliacoes(espaco.id).subscribe({
-      next: (avaliacoes) => {
-        this.espacoSelecionado.opinioes = avaliacoes.map(a => ({
-          usuario: a.usuario_nome,
-          foto: a.usuario_foto || 'https://via.placeholder.com/40',
-          texto: a.texto
-        }));
-      },
-      error: (err) => console.error('Erro ao buscar avaliações:', err)
-    });
-  }
+  // Buscar opiniões
+  this.espacosService.getAvaliacoes(espaco.id).subscribe({
+    next: (avaliacoes) => {
+      this.espacoSelecionado.opinioes = avaliacoes.map(a => ({
+        usuario: a.usuario_nome,
+        foto: a.usuario_foto || 'https://via.placeholder.com/40',
+        texto: a.comentario,       // aqui é o comentário salvo no banco
+        nota: a.nota               // adiciona a nota
+      }));
+    },
+    error: (err) => console.error('Erro ao buscar avaliações:', err)
+  });
+}
 
   fecharModal() {
     this.espacoSelecionado = null;

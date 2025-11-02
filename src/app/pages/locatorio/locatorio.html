@@ -44,7 +44,7 @@
       <div class="card-info">
         <h3>{{ espaco.nome }}</h3>
         <p>{{ espaco.descricao }}</p>
-        <div class="avaliacao">⭐ {{ espaco.avaliacao || 0 }} / 5</div>
+        <div class="avaliacao">⭐ {{ (espaco.avaliacao || 0) | number:'1.1-1' }} / 5</div>
         <p class="preco">R$ {{ espaco.precoHora || 0 }} / hora</p>
         <button class="ver-mais" (click)="abrirDetalhes(espaco)">Ver mais</button>
         <button class="reservar" (click)="abrirReserva(espaco)">Reservar agora</button>
@@ -73,7 +73,7 @@
 
       <!-- Info principal -->
       <h2>{{ espacoSelecionado.nome }}</h2>
-      <div class="avaliacao">⭐ {{ espacoSelecionado.avaliacao || 0 }} / 5</div>
+      <div class="avaliacao">⭐ {{ (espacoSelecionado.avaliacao || 0) | number:'1.1-1' }} / 5</div>
       <p class="descricao">{{ espacoSelecionado.descricao }}</p>
       <p class="preco">💰 R$ {{ espacoSelecionado.precoHora || 0 }} / hora</p>
 
@@ -98,19 +98,28 @@
       </ng-template>
 
       <!-- Opiniões -->
-      <h4>Opiniões dos usuários</h4>
-      <div class="opinioes" *ngIf="espacoSelecionado.opinioes?.length; else semOpinioes">
-        <div class="opiniao" *ngFor="let op of espacoSelecionado.opinioes">
-          <img [src]="op.foto || 'https://via.placeholder.com/40'" alt="Usuário">
-          <div>
-            <p><strong>{{ op.usuario }}</strong></p>
-            <p>{{ op.texto }}</p>
-          </div>
-        </div>
+<h4>Opiniões dos usuários</h4>
+<div class="opinioes" *ngIf="espacoSelecionado.opinioes?.length; else semOpinioes">
+  <div class="opiniao" *ngFor="let op of espacoSelecionado.opinioes">
+    <img [src]="op.foto || 'https://via.placeholder.com/40'" alt="Usuário">
+    <div class="opiniao-conteudo">
+      <p><strong>{{ op.usuario }}</strong></p>
+
+      <!-- Estrelas da avaliação -->
+      <div class="estrelas-opiniao">
+        <i *ngFor="let s of [1,2,3,4,5]" 
+           class="fa-star" 
+           [ngClass]="s <= op.nota ? 'fas' : 'far'"></i>
       </div>
-      <ng-template #semOpinioes>
-        <p>Nenhuma opinião registrada.</p>
-      </ng-template>
+
+      <p>{{ op.texto }}</p>
+    </div>
+  </div>
+</div>
+
+<ng-template #semOpinioes>
+  <p>Nenhuma opinião registrada.</p>
+</ng-template>
     </div>
   </div>
 

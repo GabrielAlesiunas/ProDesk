@@ -323,14 +323,20 @@ h2 {
 
 /* ====== Opiniões ====== */
 .opinioes {
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
 }
 
 .opiniao {
   display: flex;
+  gap: 12px;
   align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 12px;
+  background-color: #fefefe;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
 }
 
 .opiniao img {
@@ -340,13 +346,13 @@ h2 {
   object-fit: cover;
 }
 
-.opiniao p {
-  font-size: 14px;
-  color: #444;
+.opiniao-conteudo {
+  flex: 1;
 }
 
-.opiniao strong {
-  color: #000;
+.estrelas-opiniao i {
+  color: #f1c40f;
+  margin-right: 2px;
 }
 
 /* ====== Botão reservar ====== */
@@ -371,13 +377,13 @@ h2 {
 
 /* ====== Fechar modal ====== */
 .fechar {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 28px;
-  color: #666;
-  cursor: pointer;
-  transition: color 0.3s;
+position: absolute;
+    top: 0px;
+    right: 10px;
+    font-size: 28px;
+    color: red;
+    cursor: pointer;
+    transition: color 0.3s;
 }
 
 .fechar:hover {

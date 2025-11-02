@@ -206,10 +206,6 @@ export class Perfil implements OnInit {
     });
   }
 
-  ativar2FA() {
-    alert('Autenticação de dois fatores ativada!');
-  }
-
   adicionarCartao() {
     this.modalCartaoAberto = true;
     this.previewCartao = { numero: '', numeroFormatado: '', titular: '', validade: '', cvv: '' };

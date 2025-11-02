@@ -255,23 +255,25 @@ app.get('/api/avaliacoes/:espacoId', (req, res) => {
   });
 });
 
-// POST /api/espacos - cadastrar novo espaço com imagem
-app.post('/api/espacos', uploadEspaco.single('imagem'), (req, res) => {
-  let { nome, descricao, precoHora, dono_id, comodidades, imagens } = req.body;
+// POST /api/espacos - cadastrar novo espaço com múltiplas imagens
+app.post('/api/espacos', uploadEspaco.array('imagens', 10), (req, res) => {
+  let { nome, descricao, precoHora, dono_id, comodidades } = req.body;
 
-  if (!nome || !precoHora || !dono_id) return res.status(400).json({ error: 'Nome, preço e dono são obrigatórios.' });
+  if (!nome || !precoHora || !dono_id)
+    return res.status(400).json({ error: 'Nome, preço e dono são obrigatórios.' });
 
   const precoHoraNum = Number(precoHora);
-  if (isNaN(precoHoraNum)) return res.status(400).json({ error: 'Preço inválido' });
-
-  const imagemPath = req.file ? 'http://localhost:3000/' + req.file.path.replace(/\\/g, '/') : null;
+  if (isNaN(precoHoraNum))
+    return res.status(400).json({ error: 'Preço inválido' });
 
   try {
     comodidades = comodidades ? JSON.parse(comodidades) : [];
-    imagens = imagens ? JSON.parse(imagens) : [];
   } catch (err) {
-    return res.status(400).json({ error: 'Erro ao processar comodidades ou imagens' });
+    return res.status(400).json({ error: 'Erro ao processar comodidades' });
   }
+
+  const imagensPaths = req.files ? req.files.map(file => 'http://localhost:3000/' + file.path.replace(/\\/g, '/')) : [];
+  const imagemPrincipal = imagensPaths[0] || '';
 
   const query = `
     INSERT INTO espacos
@@ -284,9 +286,9 @@ app.post('/api/espacos', uploadEspaco.single('imagem'), (req, res) => {
     descricao || '',
     precoHoraNum,
     dono_id,
-    imagemPath || '',
+    imagemPrincipal,
     JSON.stringify(comodidades),
-    JSON.stringify(imagens)
+    JSON.stringify(imagensPaths)
   ], (err, result) => {
     if (err) return res.status(500).json({ error: 'Erro ao cadastrar espaço', details: err });
     res.status(201).json({ message: 'Espaço cadastrado com sucesso!', id: result.insertId });
@@ -298,22 +300,16 @@ app.post('/api/avaliacoes', (req, res) => {
   const { usuario_id, espaco_id, nota, comentario } = req.body;
 
   if (!usuario_id || !espaco_id || !nota) {
-    return res.status(400).json({ error: 'Campos obrigatórios ausentes!' });
+    return res.status(400).json({ error: 'Campos obrigatórios não preenchidos.' });
   }
 
-  const sql = `
-    INSERT INTO avaliacoes
-      (usuario_id, espaco_id, nota, comentario, criado_em)
-    VALUES (?, ?, ?, ?, NOW())
-  `;
-
-  db.query(sql, [usuario_id, espaco_id, nota, comentario], (err, result) => {
+  const query = 'INSERT INTO avaliacoes (usuario_id, espaco_id, nota, comentario, criado_em) VALUES (?, ?, ?, ?, NOW())';
+  db.query(query, [usuario_id, espaco_id, nota, comentario], (err, result) => {
     if (err) {
       console.error('Erro ao inserir avaliação:', err);
-      return res.status(500).json({ error: 'Erro ao salvar avaliação' });
+      return res.status(500).json({ error: 'Erro ao salvar avaliação.' });
     }
-
-    res.status(201).json({ message: 'Avaliação cadastrada com sucesso!', id: result.insertId });
+    res.json({ message: 'Avaliação salva com sucesso!' });
   });
 });
 
@@ -416,17 +412,29 @@ app.get('/api/reservas/usuario/:id', (req, res) => {
 });
 
 
+// PUT /api/reservas/:id/status - Atualiza o status da reserva
 app.put('/api/reservas/:id/status', (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ error: 'O campo status é obrigatório.' });
+  }
+
   const query = 'UPDATE reservas SET status = ?, atualizado_em = NOW() WHERE id = ?';
 
-  connection.query(query, [status, id], (err, result) => {
+  db.query(query, [status, id], (err, result) => {
     if (err) {
-      console.error('Erro ao atualizar status da reserva:', err);
-      return res.status(500).json({ error: 'Erro ao atualizar status' });
+      console.error('❌ Erro ao atualizar status da reserva:', err);
+      return res.status(500).json({ error: 'Erro ao atualizar status da reserva.' });
     }
-    res.json({ message: 'Status atualizado com sucesso' });
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Reserva não encontrada.' });
+    }
+
+    console.log(`✅ Reserva ${id} atualizada para status: ${status}`);
+    res.json({ message: 'Status atualizado com sucesso!' });
   });
 });
 
