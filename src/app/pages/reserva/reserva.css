@@ -95,13 +95,66 @@ h2 {
   text-align: center;
 }
 
+/* ====== Imagem do espaço ====== */
+.reserva-imagem {
+  width: 140px;
+  height: 100%;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.reserva-imagem img {
+  width: 140px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.reserva-card,
+.historico-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.reserva-left {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.reserva-imagem,
+.reserva-info {
+  margin: 0;
+  padding: 0;
+}
+
+/* Reduzir texto */
+.reserva-info h3 {
+  font-size: 18px !important;
+}
+
+.reserva-info p {
+  font-size: 13px !important;
+}
+
+/* Diminuir botões */
+.reserva-actions button {
+  padding: 8px 10px !important;
+  font-size: 14px !important;
+}
+
 /* ====== Cartões de reservas ====== */
 .reserva-card, .historico-card {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   background-color: #fff;
-  padding: 22px 28px;
+  padding: 14px 20px;
+  width: 800px;
+  margin-left: auto;
+margin-right: auto;
   border-radius: 14px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
   margin-bottom: 18px;

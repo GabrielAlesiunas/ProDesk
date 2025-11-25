@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Espacos } from './../../services/espacos';
@@ -13,7 +13,7 @@ import { ReservaModal } from '../modal-reserva/modal-reserva';
   templateUrl: './locatorio.html',
   styleUrls: ['./locatorio.css']
 })
-export class Locatorio implements OnInit {
+export class Locatorio implements OnInit, OnDestroy {
   espacos: any[] = [];
   espacosFiltrados: any[] = [];
   espacoSelecionado: any = null;
@@ -22,16 +22,17 @@ export class Locatorio implements OnInit {
   modalReservaAberto = false;
   espacoParaReserva: any = null;
 
-  // Campos de filtro
   termoBusca: string = '';
   filtroAvaliacao: string = '';
   filtroPreco: string = '';
-  filtroCompartilhavel: boolean = false; // Novo filtro
+  filtroCompartilhavel: boolean = false;
 
-  // Usuário logado
   usuarioNome: string = '';
   usuarioFoto: string = '';
   usuarioId: number = 0;
+
+  private modaisAbertos = 0;
+  private scrollYAntes = 0;
 
   constructor(
     private espacosService: Espacos,
@@ -60,7 +61,6 @@ export class Locatorio implements OnInit {
       }
     });
 
-    // Busca espaços
     this.espacosService.getEspacos().subscribe({
       next: (dados) => {
         this.espacos = dados.map(e => ({
@@ -72,9 +72,9 @@ export class Locatorio implements OnInit {
             foto: e.dono_foto
           },
           avaliacao: e.avaliacao_media,
-          compartilhavel: !!e.compartilhavel,   // Adiciona campo boolean
-          capacidadeMax: e.capacidade_max || 0, // Para modal
-          pessoasAtuais: e.pessoas_atuais || 0  // Para modal
+          compartilhavel: !!e.compartilhavel,
+          capacidadeMax: e.capacidade_max || 0,
+          pessoasAtuais: e.pessoas_atuais || 0
         }));
         this.espacosFiltrados = [...this.espacos];
       },
@@ -118,9 +118,41 @@ export class Locatorio implements OnInit {
     this.espacosFiltrados = resultado;
   }
 
+  // === BLOQUEIO DE SCROLL ===
+  private lockScroll() {
+    this.modaisAbertos++;
+    if (this.modaisAbertos > 1) return;
+
+    this.scrollYAntes = window.scrollY || window.pageYOffset || 0;
+
+    document.documentElement.classList.add('modal-aberto');
+    document.body.classList.add('modal-aberto');
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${this.scrollYAntes}px`;
+    document.body.style.width = '100%';
+  }
+
+  private unlockScroll() {
+    this.modaisAbertos = Math.max(0, this.modaisAbertos - 1);
+    if (this.modaisAbertos > 0) return;
+
+    document.documentElement.classList.remove('modal-aberto');
+    document.body.classList.remove('modal-aberto');
+
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+
+    window.scrollTo(0, this.scrollYAntes || 0);
+    this.scrollYAntes = 0;
+  }
+
+  // === MODAL DE DETALHES ===
   abrirDetalhes(espaco: any) {
     this.espacoSelecionado = { ...espaco };
     this.imagemIndex = 0;
+    this.lockScroll();
 
     this.espacosService.getAvaliacoes(espaco.id).subscribe({
       next: (avaliacoes) => {
@@ -137,6 +169,7 @@ export class Locatorio implements OnInit {
 
   fecharModal() {
     this.espacoSelecionado = null;
+    this.unlockScroll();
   }
 
   proximaImagem() {
@@ -157,12 +190,25 @@ export class Locatorio implements OnInit {
     else alert('Dono desconhecido');
   }
 
+  // === MODAL DE RESERVA ===
   abrirReserva(espaco: any) {
     this.espacoParaReserva = espaco;
     this.modalReservaAberto = true;
+    this.lockScroll();
   }
 
   fecharReserva() {
     this.modalReservaAberto = false;
+    this.espacoParaReserva = null;
+    this.unlockScroll();
+  }
+
+  // Limpa qualquer bloqueio restante se o componente for destruído
+  ngOnDestroy() {
+    document.documentElement.classList.remove('modal-aberto');
+    document.body.classList.remove('modal-aberto');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
   }
 }

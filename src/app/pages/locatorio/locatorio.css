@@ -11,6 +11,11 @@ body {
   color: #333;
 }
 
+body.modal-aberto {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
 /* ====== Container principal ====== */
 .page-container {
   max-width: 1200px;
@@ -431,6 +436,32 @@ position: absolute;
 
 .logout-btn:active {
   transform: scale(0.95);
+}
+
+/* bloqueio robusto do fundo */
+html.modal-aberto,
+body.modal-aberto {
+  overflow: hidden !important;
+  height: 100% !important;
+  touch-action: none !important; /* ajuda em mobile */
+}
+
+/* garantir que o modal ocupe a tela e só ele role */
+.modal {
+  position: fixed;
+  inset: 0;            /* top:0; right:0; bottom:0; left:0; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+  overflow: hidden; /* evita scroll do backdrop */
+}
+
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;     /* rolagem apenas dentro do modal */
+  -webkit-overflow-scrolling: touch; /* rolagem suave em iOS */
 }
 
 /* ====== Animação modal ====== */

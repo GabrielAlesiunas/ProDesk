@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface Reserva {
   id: number;
+  espaco_imagem: string;
   usuario_id: number;
   espaco_id: number;
   espaco_nome: string;

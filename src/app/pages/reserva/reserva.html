@@ -19,6 +19,7 @@
         <a routerLink="/reserva" routerLinkActive="ativo">Reservas</a>
         <a routerLink="/contato" routerLinkActive="ativo">Contato</a>
         <a routerLink="/cadastrar-espaco" routerLinkActive="ativo">Cadastrar espaço</a>
+        <a routerLink="/dashboard" routerLinkActive="ativo">Dashboard</a>
       </nav>
 
       <router-outlet></router-outlet>
@@ -41,17 +42,26 @@
       <section class="reservas-ativas" *ngIf="reservasAtivas.length > 0; else semAtivas">
         <h2>Meus Espaços Ativos</h2>
         <div class="reserva-card ativo" *ngFor="let reserva of reservasAtivas">
-          <div class="reserva-info">
-            <h3>{{ reserva.espaco_nome }}</h3>
-            <span class="reserva-status">Ativa</span>
-            <p>Data: {{ reserva.data_reserva | date:'dd/MM/yyyy' }}</p>
-            <p>Horário: {{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</p>
-            <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
+
+          <div class="reserva-left">
+            <div class="reserva-imagem">
+              <img [src]="reserva.espaco_imagem" alt="Imagem do espaço" class="imagem-espaco">
+            </div>
+
+            <div class="reserva-info">
+              <h3>{{ reserva.espaco_nome }}</h3>
+              <span class="reserva-status">Ativa</span>
+              <p>Data: {{ reserva.data_reserva | date:'dd/MM/yyyy' }}</p>
+              <p>Horário: {{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</p>
+              <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
+            </div>
           </div>
+
           <div class="reserva-actions">
             <button class="finalizar-btn" (click)="abrirModal(reserva, 'finalizar')">Finalizar</button>
             <button class="cancelar-btn" (click)="abrirModal(reserva, 'cancelar')">Cancelar</button>
           </div>
+
         </div>
       </section>
 
@@ -66,24 +76,28 @@
       <section class="historico-reservas" *ngIf="historicoReservas.length > 0; else semHistorico">
         <h2>Histórico de Reservas</h2>
         <div class="historico-card" *ngFor="let reserva of historicoReservas; let i = index">
-          <div class="reserva-info">
-            <h3>{{ reserva.espaco_nome }}</h3>
-            <!-- Status colorido -->
-            <span class="reserva-status" [ngClass]="{
-        'finalizada': reserva.status === 'finalizada',
-        'cancelada': reserva.status === 'cancelada'
-      }">
-              {{ reserva.status === 'finalizada' ? 'Finalizada' : (reserva.status === 'cancelada' ? 'Cancelada' :
-              reserva.status) }}
-            </span>
-            <p>Data: {{ reserva.data_reserva | date:'dd/MM/yyyy' }}</p>
-            <p>Horário: {{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</p>
-            <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
+
+          <div class="reserva-left">
+            <div class="reserva-imagem">
+              <img [src]="reserva.espaco_imagem" alt="Imagem do espaço" class="imagem-espaco">
+            </div>
+
+            <div class="reserva-info">
+              <h3>{{ reserva.espaco_nome }}</h3>
+
+              <span class="reserva-status" [ngClass]="{ 'finalizada': reserva.status === 'finalizada',
+                         'cancelada': reserva.status === 'cancelada' }">
+                {{ reserva.status === 'finalizada' ? 'Finalizada' :
+                reserva.status === 'cancelada' ? 'Cancelada' : reserva.status }}
+              </span>
+
+              <p>Data: {{ reserva.data_reserva | date:'dd/MM/yyyy' }}</p>
+              <p>Horário: {{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</p>
+              <p>Preço: R$ {{ reserva.preco | number:'1.2-2' }}</p>
+            </div>
           </div>
 
           <div class="reserva-actions">
-            <button class="repetir-btn">Reservar Novamente</button>
-            <!-- Avaliar só aparece se não estiver cancelada -->
             <button *ngIf="!avaliado[i] && reserva.status !== 'cancelada'" class="avaliar-btn"
               (click)="abrirFormAvaliacao(i)">
               Avaliar
@@ -101,9 +115,11 @@
             <textarea [(ngModel)]="comentario[i]" rows="2" placeholder="Escreva seu comentário..."></textarea>
 
             <button (click)="enviarAvaliacao(i)">Enviar</button>
-            <button (click)="fecharFormAvaliacao(i)" class="cancelar-form">Cancelar</button>
+            <button class="cancelar-form" (click)="fecharFormAvaliacao(i)">Cancelar</button>
           </div>
+
         </div>
+
       </section>
 
       <ng-template #semHistorico>

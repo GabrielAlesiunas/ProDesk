@@ -39,29 +39,32 @@ export class Login {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+  if (this.loginForm.valid) {
+    const { email, password } = this.loginForm.value;
 
-      this.auth.login(email, password).subscribe({
-        next: (res) => {
-          console.log('Login bem-sucedido:', res);
-          this.router.navigate(['/locatorio']);
-        },
-        error: (err) => {
-          const error = err.error.error || 'Erro no login.';
-          if (error === 'Usuário não encontrado.') {
-            this.loginForm.get('email')?.setErrors({ notFound: true });
-          } else if (error === 'Senha incorreta.') {
-            this.loginForm.get('password')?.setErrors({ incorrect: true });
-          } else {
-            this.errorMessage = error;
-          }
+    this.auth.login(email, password).subscribe({
+      next: (res) => {
+        console.log('Login bem-sucedido:', res);
+        this.router.navigate(['/locatorio']);
+      },
+      error: (err) => {
+        const error = err.error.error || 'Erro no login.';
+        if (error === 'Usuário não encontrado.') {
+          this.loginForm.get('email')?.setErrors({ notFound: true });
+          alert('Email não encontrado.'); // ⚠️ Alerta do navegador
+        } else if (error === 'Senha incorreta.') {
+          this.loginForm.get('password')?.setErrors({ incorrect: true });
+          alert('Senha incorreta.'); // ⚠️ Alerta do navegador
+        } else {
+          this.errorMessage = error;
+          alert(error); // ⚠️ Alerta genérico
         }
-      });
-    } else {
-      this.loginForm.markAllAsTouched();
-    }
+      }
+    });
+  } else {
+    this.loginForm.markAllAsTouched();
   }
+}
 
   // === 🔒 modal de redefinição ===
   abrirModalSenha() {

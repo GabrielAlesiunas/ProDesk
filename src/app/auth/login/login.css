@@ -10,7 +10,11 @@
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-  background: linear-gradient(135deg, rgb(58, 162, 233), rgb(58, 162, 233));
+  /* background: linear-gradient(135deg, rgb(58, 162, 233), rgb(58, 162, 233)); */
+  background-image: url("../../../../public/assets/background.png");
+  background-size: cover;         /* Faz a imagem cobrir toda a tela */
+  background-position: center;    /* Centraliza a imagem */
+  background-repeat: no-repeat;   /* Evita repetição da imagem */
 }
 
 .auth-logo {
@@ -33,6 +37,8 @@
   max-width: 420px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   animation: fadeIn 0.6s ease;
+  margin-right: 300px;
+  margin-top: 25px;
 }
 
 .login-card h2 {
@@ -130,6 +136,19 @@ button {
 .error i {
   margin-right: 6px;
 }
+
+.field-error {
+  color: #f44336;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.field-error i {
+  margin-right: 5px;
+}
+
 
 /* ======= Modal de redefinição de senha ======= */
 .modal-overlay {

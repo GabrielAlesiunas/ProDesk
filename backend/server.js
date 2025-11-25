@@ -25,6 +25,14 @@ const db = mysql.createConnection({
   database: 'prodesk'
 });
 
+// const db = mysql.createConnection({
+//   host: 'shortline.proxy.rlwy.net',
+//   user: 'root',
+//   password: 'RGyXaMjPmInYOYjfoaWppqIMoQxeqDhw',
+//   database: 'railway',
+//   port: 31961
+// });
+
 db.connect(err => {
   if (err) console.error('Erro ao conectar:', err);
   else console.log('✅ Conectado ao MySQL!');
@@ -73,7 +81,7 @@ app.post('/api/login', (req, res) => {
     const usuario = results[0];
     bcrypt.compare(password, usuario.senha, (err, match) => {
       if (err) return res.status(500).json({ error: 'Erro ao verificar senha.' });
-      if (!match) return res.status(401).json({ error: 'Senha incorreta.' });
+      if (!match) return res.status(400).json({ error: 'Senha incorreta.' });
 
       res.json({
         id: usuario.id,

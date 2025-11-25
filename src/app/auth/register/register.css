@@ -18,6 +18,10 @@ body, html {
   align-items: center;
   min-height: 100vh;
   padding: 20px;
+  background-image: url("../../../../public/assets/background.png");
+  background-size: cover;         /* Faz a imagem cobrir toda a tela */
+  background-position: center;    /* Centraliza a imagem */
+  background-repeat: no-repeat;   /* Evita repetição da imagem */
 }
 
 /* Card */
@@ -26,8 +30,9 @@ body, html {
   max-width: 400px;
   background: #fff;
   border-radius: 20px;
-  padding: 40px 30px;
+  padding: 20px 30px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  margin-right: 180px;
   text-align: center;
   animation: fadeIn 0.7s ease;
 }

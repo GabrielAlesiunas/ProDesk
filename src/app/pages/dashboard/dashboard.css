@@ -1,0 +1,170 @@
+/* ====== Reset e base ====== */
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f5f6fa;
+  color: #333;
+}
+
+body.modal-aberto {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* ====== Container principal ====== */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 40px;
+}
+
+/* ====== MENU SUPERIOR ====== */
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgb(58, 162, 233);
+  color: #fff;
+  display: flex;
+  justify-content: space-between; /* título à esquerda, usuário à direita */
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.menu h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Nav centralizado */
+.menu nav {
+  display: flex;
+  justify-content: center; /* centraliza horizontalmente */
+  flex: 1; /* ocupa espaço entre título e usuário */
+  gap: 25px;
+  margin: 0 20px;
+}
+
+.menu nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.menu nav a:hover {
+  color: #d1ecff;
+}
+
+/* Área do usuário */
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer; /* indica que é clicável */
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.user-name {
+  font-weight: 500;
+  color: white;
+}
+
+:root{
+  --accent: #3aa2e9;
+  --bg: #f5f6fa;
+  --card: #fff;
+  --muted: #6b7280;
+  --radius: 12px;
+}
+
+.dashboard-page {
+  padding: 28px;
+  background: var(--bg);
+  min-height: calc(100vh - 100px);
+}
+
+/* header */
+.dashboard-header h1 {
+  margin: 0 0 6px 0;
+  color: #102a43;
+  font-size: 24px;
+}
+.dashboard-header .subtitle {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+/* indicadores */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  box-shadow: 0 6px 18px rgba(16,42,67,0.06);
+}
+
+.card-title { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+.card-value { font-size: 20px; font-weight: 700; color: #0b3b6f; }
+
+/* charts grid */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* chart card */
+.chart-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(16,42,67,0.06);
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+}
+
+.chart-card.wide {
+  grid-column: 1 / -1; /* ocupa toda a largura em baixo */
+  margin-top: 12px;
+}
+
+.chart-header h3 { margin: 0 0 8px 0; color: #102a43; font-size: 16px; }
+.chart-canvas { flex: 1 1 160px; position: relative; min-height: 160px; }
+.chart-canvas.small { min-height: 200px; }
+
+/* responsividade */
+@media (max-width: 1100px) {
+  .cards-row { grid-template-columns: repeat(3, 1fr); }
+  .charts-grid { grid-template-columns: 1fr; }
+  .chart-card.wide { grid-column: auto; }
+}
+
+@media (max-width: 640px) {
+  .cards-row { grid-template-columns: repeat(2, 1fr); }
+  .card-value { font-size: 16px; }
+  .dashboard-page { padding: 16px; }
+}

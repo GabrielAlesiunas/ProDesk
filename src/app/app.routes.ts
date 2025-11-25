@@ -8,6 +8,7 @@ import { Reserva } from './pages/reserva/reserva';
 import { CadastrarEspaco } from './pages/cadastrar-espaco/cadastrar-espaco';
 import { ReservaModal } from './pages/modal-reserva/modal-reserva';
 import { StatusPagamento } from './pages/status-pagamento/status-pagamento';
+import { DashboardComponent } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'cadastrar-espaco', component: CadastrarEspaco },
   { path: 'modal-reserva', component: ReservaModal },
   { path: 'status-pagamento', component: StatusPagamento },
+  { path: 'dashboard', component: DashboardComponent },
   { path: '**', redirectTo: 'login' }
 ];

@@ -1,7 +1,7 @@
 <div class="login-container">
   <div class="login-card">
     <div class="auth-logo">
-  <img src="assets/logo.jpg" alt="Logo da empresa" class="logo" />
+  <!-- <img src="assets/logo.jpg" alt="Logo da empresa" class="logo" /> -->
   <h2>Entrar</h2>
 </div>
 
@@ -11,21 +11,28 @@
       </div>
 
       <!-- Email -->
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" formControlName="email" required />
-        <i class="fas fa-envelope icon"></i>
-      </div>
+      <!-- Email -->
+<div class="input-group">
+  <label>Email</label>
+  <input type="email" formControlName="email" required />
+  <i class="fas fa-envelope icon"></i>
+  <div class="field-error" *ngIf="loginForm.get('email')?.hasError('notFound')">
+    <i class="fas fa-exclamation-circle"></i> Email não encontrado.
+  </div>
+</div>
 
-      <!-- Senha -->
-      <div class="input-group">
-        <label>Senha</label>
-        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required />
-        <i class="fas fa-lock icon"></i>
-        <span class="toggle-pass" (click)="showPassword = !showPassword">
-          <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-        </span>
-      </div>
+<!-- Senha -->
+<div class="input-group">
+  <label>Senha</label>
+  <input [type]="showPassword ? 'text' : 'password'" formControlName="password" required />
+  <i class="fas fa-lock icon"></i>
+  <span class="toggle-pass" (click)="showPassword = !showPassword">
+    <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+  </span>
+  <div class="field-error" *ngIf="loginForm.get('password')?.hasError('incorrect')">
+    <i class="fas fa-exclamation-circle"></i> Senha incorreta.
+  </div>
+</div>
 
       <button type="submit" [disabled]="loginForm.invalid" class="btn-login">Entrar</button>
 

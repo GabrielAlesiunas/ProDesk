@@ -1,0 +1,88 @@
+<div class="page-container">
+<header class="menu">
+    <h1>ProDesk Coworking</h1>
+    <nav>
+      <a routerLink="/locatorio" routerLinkActive="ativo">Espaços</a>
+      <a routerLink="/reserva" routerLinkActive="ativo">Reservas</a>
+      <a routerLink="/contato" routerLinkActive="ativo">Contato</a>
+      <a routerLink="/cadastrar-espaco" routerLinkActive="ativo">Cadastrar espaço</a>
+      <a routerLink="/dashboard" routerLinkActive="ativo">Dashboard</a>
+    </nav>
+
+    <router-outlet></router-outlet>
+
+    <a [routerLink]="'/perfil'" class="user-area" *ngIf="usuarioNome" style="display: flex; align-items: center; text-decoration: none;">
+      <span class="user-name" style="margin-right: 8px;">{{ usuarioNome }}</span>
+      <img class="user-avatar" [src]="usuarioFoto" alt="Usuário" style="width: 40px; height: 40px; border-radius: 50%;">
+    </a>
+
+    <button *ngIf="usuarioNome" (click)="logout()" class="logout-btn" title="Sair">
+      <i class="fas fa-right-from-bracket"></i>
+    </button>
+  </header>
+
+<section class="dashboard-page">
+  <header class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Visão geral — indicadores e tendências</p>
+  </header>
+
+  <!-- Indicadores -->
+  <div class="cards-row">
+    <div class="card card-indicator">
+      <div class="card-title">Total de reservas</div>
+      <div class="card-value">{{ totalReservas }}</div>
+    </div>
+
+    <div class="card card-indicator">
+      <div class="card-title">Reservas ativas</div>
+      <div class="card-value">{{ reservasAtivas }}</div>
+    </div>
+
+    <div class="card card-indicator">
+      <div class="card-title">Faturamento total</div>
+      <div class="card-value">R$ {{ faturamentoTotal | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="card card-indicator">
+      <div class="card-title">Avaliações médias</div>
+      <div class="card-value">{{ avaliacaoMedia | number:'1.1-2' }} ★</div>
+    </div>
+
+    <div class="card card-indicator">
+      <div class="card-title">Total de clientes</div>
+      <div class="card-value">{{ totalClientes }}</div>
+    </div>
+  </div>
+
+  <!-- Gráficos -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Reservas por mês</h3>
+      </div>
+      <div class="chart-canvas">
+        <canvas id="{{reservasMesCanvasId}}"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Tipos de espaços mais reservados</h3>
+      </div>
+      <div class="chart-canvas small">
+        <canvas id="{{tiposEspacoCanvasId}}"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card wide">
+      <div class="chart-header">
+        <h3>Faturamento mensal</h3>
+      </div>
+      <div class="chart-canvas">
+        <canvas id="{{faturamentoCanvasId}}"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
