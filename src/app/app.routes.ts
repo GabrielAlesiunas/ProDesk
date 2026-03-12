@@ -9,9 +9,10 @@ import { CadastrarEspaco } from './pages/cadastrar-espaco/cadastrar-espaco';
 import { ReservaModal } from './pages/modal-reserva/modal-reserva';
 import { StatusPagamento } from './pages/status-pagamento/status-pagamento';
 import { DashboardComponent } from './pages/dashboard/dashboard';
+import { Home } from './pages/home/home';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', component: Home },
   { path: 'login', component: Login },
   { path: 'register', component: RegisterComponent },
   { path: 'locatorio', component: Locatorio },
@@ -22,5 +23,6 @@ export const routes: Routes = [
   { path: 'modal-reserva', component: ReservaModal },
   { path: 'status-pagamento', component: StatusPagamento },
   { path: 'dashboard', component: DashboardComponent },
-  { path: '**', redirectTo: 'login' }
+  { path: 'home', component: Home },
+  { path: '**', redirectTo: '' }
 ];

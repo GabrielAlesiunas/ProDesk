@@ -18,16 +18,32 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
+
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "public/assets/vendor/bootstrap/css/bootstrap.min.css",
+              "public/assets/vendor/bootstrap-icons/bootstrap-icons.css",
+              "public/assets/vendor/aos/aos.css",
+              "public/assets/vendor/glightbox/css/glightbox.min.css",
+              "public/assets/css/main.css"
+            ],
+
+            "scripts": [
+              "public/assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
+              "public/assets/vendor/php-email-form/validate.js",
+              "public/assets/vendor/aos/aos.js",
+              "public/assets/vendor/glightbox/js/glightbox.min.js",
+              "public/assets/js/main.js"
             ]
           },
+
           "configurations": {
             "production": {
               "budgets": [
@@ -44,14 +60,17 @@
               ],
               "outputHashing": "all"
             },
+
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
             }
           },
+
           "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
@@ -64,9 +83,11 @@
           },
           "defaultConfiguration": "development"
         },
+
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
+
         "test": {
           "builder": "@angular/build:karma",
           "options": {
@@ -75,20 +96,35 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
+
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
+
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "public/assets/vendor/bootstrap/css/bootstrap.min.css",
+              "public/assets/vendor/bootstrap-icons/bootstrap-icons.css",
+              "public/assets/vendor/aos/aos.css",
+              "public/assets/vendor/glightbox/css/glightbox.min.css",
+              "public/assets/css/main.css"
+            ],
+
+            "scripts": [
+              "public/assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
+              "public/assets/vendor/aos/aos.js",
+              "public/assets/vendor/glightbox/js/glightbox.min.js",
+              "public/assets/js/main.js"
             ]
           }
         }
       }
     }
   },
+
   "cli": {
     "analytics": "87c0eca6-eaf1-4f24-873f-c3ee78450621"
   }
