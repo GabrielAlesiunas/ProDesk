@@ -45,7 +45,7 @@ export class CadastrarEspaco implements OnInit {
 
   logout(): void {
     localStorage.removeItem('usuarioLogado');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   adicionarComodidade(): void {

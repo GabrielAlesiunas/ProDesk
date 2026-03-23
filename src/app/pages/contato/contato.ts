@@ -27,6 +27,6 @@ export class Contato implements OnInit {
   // 🔴 Método de logout
   logout(): void {
     localStorage.removeItem('usuarioLogado'); // remove dados do usuário
-    this.router.navigate(['/login']); // redireciona para a página de login
+    this.router.navigate(['/home']); // redireciona para a página de login
   }
 }

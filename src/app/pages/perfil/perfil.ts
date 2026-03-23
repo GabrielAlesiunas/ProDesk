@@ -69,7 +69,7 @@ export class Perfil implements OnInit {
 
   logout(): void {
     localStorage.removeItem('usuarioLogado'); // remove dados do usuário
-    this.router.navigate(['/login']); // redireciona para a tela de login
+    this.router.navigate(['/home']); // redireciona para a tela de login
   }
 
   carregarDadosUsuario() {

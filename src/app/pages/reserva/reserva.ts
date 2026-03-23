@@ -72,7 +72,7 @@ export class Reserva implements OnInit {
 
   logout(): void {
     localStorage.removeItem('usuarioLogado');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   // === abertura e fechamento do modal ===

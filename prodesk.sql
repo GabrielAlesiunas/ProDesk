@@ -158,7 +158,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `cpf`, `telefone`, `endereco`, `foto`, `senha`, `criado_em`) VALUES
 (1, 'Gabriel', 'gabriel21.raimundo@gmail.com', '48109301819', NULL, NULL, '', '$2b$10$eMIHpq2GPrXiNOtOQLc1W.VQxM/ZGTcWRcLl50nv.6aJYVu4rKp5u', '2025-11-02 17:55:37'),
-(4, 'admin', 'admin@gmail.com', '246.749.163-30', '999999999', 'Rua 01', 'http://localhost:3000/uploads/usuario_4.jpg', '$2b$10$KxZZ.O3pfOrezRCfMfWzLuDmVNVF0Ffs.hIb0abClGCspuk.h7I.K', '2025-10-21 15:52:32');
+(4, 'admin', 'admin@gmail.com', '246.749.163-30', '999999999', 'Rua 01', 'http://localhost:3000/uploads/usuario_4.jpg', '$2b$10$q.yfeKNgGcwanssZA/W/rOijjYJVQB.FtqBuvZmBBvY.ObG10iusG', '2025-10-21 15:52:32');
 
 --
 -- Índices para tabelas despejadas

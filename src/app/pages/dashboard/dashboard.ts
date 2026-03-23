@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   logout(): void {
     this.auth.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   // ===========================
