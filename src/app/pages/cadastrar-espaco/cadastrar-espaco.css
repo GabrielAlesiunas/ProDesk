@@ -39,6 +39,10 @@ body {
   font-weight: 600;
 }
 
+.sitename {
+  color: white;
+}
+
 .menu nav {
   display: flex;
   justify-content: center;

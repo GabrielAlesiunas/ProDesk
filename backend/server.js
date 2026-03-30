@@ -4,7 +4,6 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
-
 const app = express();
 
 // Configurações CORS
@@ -196,19 +195,43 @@ app.put('/api/usuarios/:id/senha', (req, res) => {
 // ========================
 // Rotas de cartões
 // ========================
-app.post('/api/usuarios/:id/cartoes', (req, res) => {
+app.post('/api/usuarios/:id/cartoes', async (req, res) => {
   const { id } = req.params;
   const { numero, nome, validade, cvv } = req.body;
 
-  if (!numero || !nome || !validade || !cvv) return res.status(400).json({ error: 'Todos os campos do cartão são obrigatórios.' });
+  if (!numero || !nome || !validade || !cvv) {
+    return res.status(400).json({ error: 'Todos os campos do cartão são obrigatórios.' });
+  }
 
-  const query = 'INSERT INTO cartoes (usuario_id, numero, nome, validade, cvv) VALUES (?, ?, ?, ?, ?)';
-  db.query(query, [id, numero, nome, validade, cvv], (err, result) => {
-    if (err) return res.status(500).json({ error: 'Erro ao adicionar cartão.' });
-    res.status(201).json({ message: 'Cartão adicionado com sucesso!' });
-  });
+  try {
+    // 🔐 HASH (não reversível)
+    const numeroHash = await bcrypt.hash(numero, 10);
+    const nomeHash = await bcrypt.hash(nome, 10);
+
+    // ✅ Últimos 4 dígitos (pra exibir depois)
+    const ultimos4 = numero.slice(-4);
+
+    // ❌ NÃO salvar CVV
+    const query = `
+      INSERT INTO cartoes (usuario_id, numero_hash, nome_hash, validade, ultimos4)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.query(query, [id, numeroHash, nomeHash, validade, ultimos4], (err) => {
+      if (err) return res.status(500).json({ error: 'Erro ao adicionar cartão.' });
+
+      res.status(201).json({ message: 'Cartão adicionado com segurança!' });
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao processar dados do cartão.' });
+  }
 });
 
+
+// ========================
+// Remover cartão
+// ========================
 app.delete('/api/usuarios/:id/cartoes/:cartaoId', (req, res) => {
   const { id, cartaoId } = req.params;
 
@@ -216,16 +239,35 @@ app.delete('/api/usuarios/:id/cartoes/:cartaoId', (req, res) => {
   db.query(query, [cartaoId, id], (err, result) => {
     if (err) return res.status(500).json({ error: 'Erro ao remover cartão.' });
     if (result.affectedRows === 0) return res.status(404).json({ error: 'Cartão não encontrado.' });
+
     res.json({ message: 'Cartão removido com sucesso!' });
   });
 });
 
+
+// ========================
+// Listar cartões
+// ========================
 app.get('/api/usuarios/:id/cartoes', (req, res) => {
   const { id } = req.params;
-  const query = 'SELECT id, numero, nome AS titular, validade FROM cartoes WHERE usuario_id = ?';
+
+  const query = `
+    SELECT id, ultimos4, validade
+    FROM cartoes
+    WHERE usuario_id = ?
+  `;
+
   db.query(query, [id], (err, results) => {
     if (err) return res.status(500).json({ error: 'Erro ao buscar cartões.' });
-    res.json(results);
+
+    // 🔒 Retorno seguro (mascarado)
+    const cartoes = results.map(c => ({
+      id: c.id,
+      numero: `**** **** **** ${c.ultimos4}`,
+      validade: c.validade
+    }));
+
+    res.json(cartoes);
   });
 });
 

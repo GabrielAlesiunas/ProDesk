@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 02/11/2025 às 19:44
+-- Tempo de geração: 30/03/2026 às 19:32
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -53,18 +53,18 @@ INSERT INTO `avaliacoes` (`id`, `usuario_id`, `espaco_id`, `nota`, `comentario`,
 CREATE TABLE `cartoes` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
-  `numero` varchar(20) NOT NULL,
-  `nome` varchar(100) NOT NULL,
   `validade` varchar(10) NOT NULL,
-  `cvv` varchar(5) NOT NULL
+  `numero_hash` text DEFAULT NULL,
+  `nome_hash` text DEFAULT NULL,
+  `ultimos4` varchar(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `cartoes`
 --
 
-INSERT INTO `cartoes` (`id`, `usuario_id`, `numero`, `nome`, `validade`, `cvv`) VALUES
-(3, 4, '1233455676787871', 'gabriel', '02/31', '111');
+INSERT INTO `cartoes` (`id`, `usuario_id`, `validade`, `numero_hash`, `nome_hash`, `ultimos4`) VALUES
+(5, 4, '03/31', '$2b$10$VwHCGDKpMS5TE2LzWTK24eAz66.69LqszXnyF8VR6KEfAeNppAQku', '$2b$10$raVro1lUYCu3stSHNtosTeLPGfi2418WUHSRN86GJHjPaYbWuHG5m', '1111');
 
 -- --------------------------------------------------------
 
@@ -213,7 +213,7 @@ ALTER TABLE `avaliacoes`
 -- AUTO_INCREMENT de tabela `cartoes`
 --
 ALTER TABLE `cartoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `espacos`
